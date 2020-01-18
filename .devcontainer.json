@@ -1,0 +1,21 @@
+{
+  "name": "API Container",
+  "dockerFile": "./Dockerfile.dev",
+  "settings": {
+    // This dev container does include /bin/bash if you prefer to use it instead of ash.
+    "terminal.integrated.shell.linux": "/bin/sh"
+  },
+
+  "remoteEnv": {
+    "SHELL": "/bin/sh"
+  },
+
+  "extensions": ["esbenp.prettier-vscode"],
+  "remoteUser": "node",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=try-node-node_modules,target=/workspace/node_modules,type=volume"
+  ],
+  "postCreateCommand": "sudo chown node node_modules && npm i"
+}
