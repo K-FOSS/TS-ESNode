@@ -3,7 +3,7 @@
 export type Source = string | Buffer;
 
 export interface ResolveContext {
-  parentURL: string;
+  parentURL?: string;
 }
 
 export interface ResolveResponse {

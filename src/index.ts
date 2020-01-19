@@ -1,32 +1,34 @@
 // src/index.ts
-import { URL, pathToFileURL, fileURLToPath, format } from 'url';
-import ts, { CompilerOptions } from 'typescript';
-import globby from 'globby';
-import { dirname, isAbsolute as isAbsolutePath } from 'path';
-import {
-  TransformContext,
-  Source,
-  TransformResponse,
-  ResolveContext,
-  ResolveResponse
-} from './types';
 import { createRequire } from 'module';
+import { dirname, basename } from 'path';
+import ts from 'typescript';
+import { fileURLToPath, pathToFileURL, URL } from 'url';
+import type {
+  ResolveContext,
+  ResolveResponse,
+  Source,
+  TransformContext,
+  TransformResponse
+} from './types';
+import { getTSConfig } from './Utils';
+import { findFiles } from './findFiles'
 
 const rootModulePath = `${process.cwd()}/`;
 const baseURL = pathToFileURL(rootModulePath).href;
 
 const relativePathRegex = /^\.{0,2}[/]/;
 
+// TODO: Allow customization of extensions
 const extensions = ['.ts', '.tsx'];
 const extensionsRegex = new RegExp(`\\${extensions.join('$|\\')}$`);
 
 // Custom resolver to allow `.ts` and `.tsx` extensions, along with finding files if no extension is provided.
 export async function resolve(
   specifier: string,
-  context: ResolveContext = { parentURL: baseURL },
+  context: ResolveContext,
   defaultResolve: Function
 ): Promise<ResolveResponse> {
-  const { parentURL } = context;
+  const { parentURL = baseURL } = context
 
   // If we can already see a `.ts` or `.tsx` extensions then we can create a File URL
   if (extensionsRegex.test(specifier)) {
@@ -41,27 +43,12 @@ export async function resolve(
    * If no extension is passed and is a relative import then let's try to find a `.ts` or `.tsx` file at the path
    */
   if (relativePathRegex.test(specifier) && !specifier.startsWith('file:')) {
-    const possibleFiles = await globby(
-      `${specifier}{${extensions.join(',')}}`,
-      {
-        cwd: dirname(fileURLToPath(parentURL)),
-        absolute: true
-      }
-    );
+    const fileURL = new URL(specifier, parentURL);
+    const filePath = fileURLToPath(fileURL)
 
-    /**
-     * We should error if we find more then one file that matches
-     */
-    if (possibleFiles.length > 1) {
-      throw new Error('More then one option for relative import found');
-    }
-
-    if (possibleFiles.length < 1) {
-      throw new Error('No files found');
-    }
-
+    const file = await findFiles(dirname(filePath), { fileName: basename(filePath), extensions })
     return {
-      url: pathToFileURL(possibleFiles[0]).href
+      url: file.href
     };
   }
 
@@ -78,9 +65,13 @@ export async function dynamicInstantiate(url: string) {
   const require = createRequire(
     `${url.split('/node_modules/')[0].replace('file://', '')}/node_modules/`
   );
+
   // Import the module file path
   let dynModule = require(url.replace(/.*\/node_modules\//, ''));
 
+  /**
+   * This is needed to allow for default exports in CommonJS modules.
+   */
   if (dynModule.default)
     dynModule = {
       ...dynModule.default,
@@ -125,34 +116,6 @@ export async function getFormat(
   return defaultGetFormat(url, context, defaultGetFormat);
 }
 
-let tsConfigCache: CompilerOptions;
-
-function getTSConfig(modulePath: string): CompilerOptions {
-  if (tsConfigCache) return tsConfigCache;
-  const tsConfigPath = ts.findConfigFile(modulePath, ts.sys.fileExists);
-
-  if (!tsConfigPath || !isAbsolutePath(tsConfigPath)) {
-    // If no `tsconfig.json` then we force the module to be transpiled as `ESNext`
-    tsConfigCache = {
-      module: ts.ModuleKind.ESNext,
-      target: ts.ScriptTarget.ESNext,
-      moduleResolution: ts.ModuleResolutionKind.NodeJs,
-      allowJs: true,
-      skipLibCheck: true
-    };
-  } else {
-    const tsConfigFile = ts.readConfigFile(tsConfigPath, ts.sys.readFile)
-      .config;
-
-    tsConfigCache = ts.convertCompilerOptionsFromJson(
-      tsConfigFile.compilerOptions,
-      dirname(tsConfigPath)
-    ).options;
-  }
-
-  return tsConfigCache;
-}
-
 export async function transformSource(
   source: Source,
   context: TransformContext,
@@ -160,8 +123,7 @@ export async function transformSource(
 ): Promise<TransformResponse> {
   // Only transform TypeScript Modules
   if (extensionsRegex.test(context.url)) {
-    const sourceFileURL = new URL(context.url);
-    const sourceFilePath = fileURLToPath(sourceFileURL);
+    const sourceFilePath = fileURLToPath(context.url);
 
     // Load the closest `tsconfig.json` to the source file
     const tsConfig = getTSConfig(dirname(sourceFilePath));
@@ -172,7 +134,7 @@ export async function transformSource(
       reportDiagnostics: true
     });
 
-    // TODO: Actually check the TypeScript Code.
+    // TODO: Actually "check" the TypeScript Code.
     return {
       source: transpiledModule.outputText
     };

@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ES6",
+    "module": "ESNext",
     "moduleResolution": "Node",
+    "lib": ["ESNext"],
+    "jsx": "react",
     "strict": true,
+    "noImplicitAny": true,
     "importHelpers": false,
     "baseUrl": "src",
     "pretty": true,
