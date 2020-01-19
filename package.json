@@ -1,12 +1,16 @@
 {
-  "name": "ts-esnode",
-  "version": "1.0.0",
+  "name": "@k-foss/ts-esnode",
+  "version": "1.0.1",
   "description": "TS-ESNode is a Node.JS v14 Experimental loader hook for transpiling ESNext TypeScript to ESNext ESModule Node.JS Code on the fly",
-  "main": "dist/index.js",
+  "main": "out/dist/index.js",
   "type": "module",
-  "private": true,
+  "repository": "https://github.com/K-FOSS/TS-ESNode.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "files": [
-    "dist/**/*.js"
+    "out/dist/**/*.js",
+    "README.md"
   ],
   "dependencies": {},
   "devDependencies": {
