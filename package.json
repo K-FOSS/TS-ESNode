@@ -5,9 +5,6 @@
   "main": "out/dist/index.js",
   "type": "module",
   "repository": "https://github.com/K-FOSS/TS-ESNode.git",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "files": [
     "out/dist/**/*.js",
     "README.md"
@@ -27,6 +24,7 @@
     "build": "node --experimental-specifier-resolution=node ./out/build/build.js",
     "pretry": "npm run build",
     "try": "node --loader ./out/dist/index.js --experimental-specifier-resolution=node ./test/",
+    "dev": "node --loader @k-foss/ts-esnode --experimental-specifier-resolution=node --harmony-top-level-await ./src/index.ts",
     "prepublishOnly": "npm run build"
   },
   "author": {
