@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ES6",
+    "moduleResolution": "Node",
+    "strict": true,
+    "importHelpers": false,
+    "baseUrl": "src",
+    "pretty": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"]
+}

@@ -10,6 +10,8 @@ Install NPM modules
 
 ```
 npm install
+
+cd test && npm i && cd ..
 ```
 
 Try it out

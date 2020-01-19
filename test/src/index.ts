@@ -1,5 +1,8 @@
 // test/index.ts
+import { Query } from 'type-graphql';
 import { checkIsHelloWorld } from './Lab';
+
+console.log(Query);
 
 console.log(`I'm TypeScript`);
 

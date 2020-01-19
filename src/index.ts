@@ -1,5 +1,5 @@
 // src/index.ts
-import { URL, pathToFileURL, fileURLToPath } from 'url';
+import { URL, pathToFileURL, fileURLToPath, format } from 'url';
 import ts, { CompilerOptions } from 'typescript';
 import globby from 'globby';
 import { dirname, isAbsolute as isAbsolutePath } from 'path';
@@ -10,6 +10,7 @@ import {
   ResolveContext,
   ResolveResponse
 } from './types';
+import { createRequire } from 'module';
 
 const rootModulePath = `${process.cwd()}/`;
 const relativePathRegex = /^\.{0,2}[/]/;
@@ -25,9 +26,9 @@ export async function resolve(
   specifier: string,
   context: ResolveContext = { parentURL: baseURL },
   defaultResolve: Function
+  // @ts-ignore
 ): Promise<ResolveResponse> {
   const { parentURL } = context;
-
   if (relativePathRegex.test(specifier) && !specifier.startsWith('file:')) {
     const possibleFiles = await globby(
       `${specifier}{${extensions.join(',')}}`,
@@ -56,17 +57,35 @@ export async function resolve(
   return defaultResolve(specifier, context, defaultResolve);
 }
 
-export function getFormat(
+export async function dynamicInstantiate(url: string) {
+  const require = createRequire(
+    `${url.split('/node_modules/')[0].replace('file://', '')}/node_modules/`
+  );
+  const dynModule = require(url.replace(/.*\/node_modules\//, ''));
+
+  return {
+    exports: Object.keys(dynModule),
+    execute: (module: any) => {
+      for (const [key, fn] of Object.entries(dynModule)) module[key].set(fn);
+    }
+  };
+}
+
+export async function getFormat(
   url: string,
   context: never,
   defaultGetFormat: Function
 ) {
-  // Now that we patched resolve to let TypeScript URLs through, we need to
-  // tell Node.js what format such URLs should be interpreted as. For the
-  // purposes of this loader, all TypeScript URLs are ES modules.
   if (extensionsRegex.test(url)) {
     return {
       format: 'module'
+    };
+  }
+
+  // We need to use our dynamic hook on Node.JS CommonJS `node_modules` due to anything exported by TypeScript not being accepted by the exports check in Node
+  if (url.includes('node_modules')) {
+    return {
+      format: 'dynamic'
     };
   }
 
@@ -112,17 +131,13 @@ export async function transformSource(
 
     const tsConfig = getTSConfig(dirname(sourceFilePath));
 
+    const transpiledModule = ts.transpileModule(source.toString(), {
+      compilerOptions: tsConfig,
+      reportDiagnostics: true
+    });
+
     return {
-      source: ts.transpileModule(source.toString(), {
-        compilerOptions: {
-          ...tsConfig,
-          module: ts.ModuleKind.ESNext,
-          target: ts.ScriptTarget.ESNext,
-          skipLibCheck: true,
-          allowSyntheticDefaultImports: true
-        },
-        reportDiagnostics: true
-      }).outputText
+      source: transpiledModule.outputText
     };
   }
 
