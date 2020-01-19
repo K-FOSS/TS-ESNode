@@ -28,6 +28,15 @@ export async function resolve(
 ): Promise<ResolveResponse> {
   const { parentURL } = context;
 
+  // If we can already see a `.ts` or `.tsx` extensions then we can create a File URL
+  if (extensionsRegex.test(specifier)) {
+    // Node.js normally errors on unknown file extensions, so return a URL for
+    // specifiers ending in the TypeScript file extensions.
+    return {
+      url: new URL(specifier, parentURL).href
+    };
+  }
+
   /**
    * If no extension is passed and is a relative import then let's try to find a `.ts` or `.tsx` file at the path
    */
@@ -47,17 +56,12 @@ export async function resolve(
       throw new Error('More then one option for relative import found');
     }
 
+    if (possibleFiles.length < 1) {
+      throw new Error('No files found');
+    }
+
     return {
       url: pathToFileURL(possibleFiles[0]).href
-    };
-  }
-
-  // If we can already see a `.ts` or `.tsx` extensions then we can create a File URL
-  if (extensionsRegex.test(specifier)) {
-    // Node.js normally errors on unknown file extensions, so return a URL for
-    // specifiers ending in the TypeScript file extensions.
-    return {
-      url: new URL(specifier, parentURL).href
     };
   }
 
@@ -74,15 +78,23 @@ export async function dynamicInstantiate(url: string) {
   const require = createRequire(
     `${url.split('/node_modules/')[0].replace('file://', '')}/node_modules/`
   );
-
   // Import the module file path
-  const dynModule = require(url.replace(/.*\/node_modules\//, ''));
+  let dynModule = require(url.replace(/.*\/node_modules\//, ''));
+
+  if (dynModule.default)
+    dynModule = {
+      ...dynModule.default,
+      ...dynModule
+    };
+
+  const linkKeys = Object.keys(dynModule);
 
   return {
-    exports: Object.keys(dynModule),
+    exports: [...linkKeys, 'default'],
     execute: (module: any) => {
+      module.default.set(dynModule);
       // For all elements in the import set the module's key.
-      for (const [key, fn] of Object.entries(dynModule)) module[key].set(fn);
+      for (const linkKey of linkKeys) module[linkKey].set(dynModule[linkKey]);
     }
   };
 }

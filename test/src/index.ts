@@ -1,12 +1,15 @@
 // test/index.ts
-import { Query } from 'type-graphql';
 import { checkIsHelloWorld } from './Lab';
 
-console.log(Query);
+async function startHelloWorld(): Promise<void> {
+  console.log('Starting HelloWorld');
 
-console.log(`I'm TypeScript`);
+  console.log(`I'm TypeScript`);
 
-const localString = 'helloWorld';
-const isHelloWorld = await checkIsHelloWorld(localString);
+  const localString = 'helloWorld';
+  const isHelloWorld = await checkIsHelloWorld(localString);
 
-console.log(`${localString} is helloWorld: `, isHelloWorld);
+  console.log(`${localString} is helloWorld: `, isHelloWorld);
+}
+
+startHelloWorld();
