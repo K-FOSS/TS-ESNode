@@ -1,6 +1,6 @@
 {
   "name": "@k-foss/ts-esnode",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TS-ESNode is a Node.JS v14 Experimental loader hook for transpiling ESNext TypeScript to ESNext ESModule Node.JS Code on the fly",
   "main": "out/dist/index.js",
   "type": "module",
