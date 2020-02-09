@@ -22,7 +22,7 @@ Now when you run `npm run dev` then you should be running your TypeScript source
 
 ## Testing
 
-**MUST HAVE NODE.JS v14**
+**MUST HAVE NODE.JS v13.7 or newer**
 
 To try this out, clone repo
 
