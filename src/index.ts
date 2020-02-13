@@ -1,17 +1,17 @@
 // src/index.ts
 import { createRequire } from 'module';
-import { dirname, basename } from 'path';
+import { basename, dirname } from 'path';
 import ts from 'typescript';
 import { fileURLToPath, pathToFileURL, URL } from 'url';
-import type {
+import { findFiles } from './findFiles';
+import {
   ResolveContext,
   ResolveResponse,
   Source,
   TransformContext,
-  TransformResponse
+  TransformResponse,
 } from './types';
 import { getTSConfig } from './Utils';
-import { findFiles } from './findFiles'
 
 const rootModulePath = `${process.cwd()}/`;
 const baseURL = pathToFileURL(rootModulePath).href;
@@ -26,16 +26,16 @@ const extensionsRegex = new RegExp(`\\${extensions.join('$|\\')}$`);
 export async function resolve(
   specifier: string,
   context: ResolveContext,
-  defaultResolve: Function
+  defaultResolve: Function,
 ): Promise<ResolveResponse> {
-  const { parentURL = baseURL } = context
+  const { parentURL = baseURL } = context;
 
   // If we can already see a `.ts` or `.tsx` extensions then we can create a File URL
   if (extensionsRegex.test(specifier)) {
     // Node.js normally errors on unknown file extensions, so return a URL for
     // specifiers ending in the TypeScript file extensions.
     return {
-      url: new URL(specifier, parentURL).href
+      url: new URL(specifier, parentURL).href,
     };
   }
 
@@ -44,11 +44,14 @@ export async function resolve(
    */
   if (relativePathRegex.test(specifier) && !specifier.startsWith('file:')) {
     const fileURL = new URL(specifier, parentURL);
-    const filePath = fileURLToPath(fileURL)
+    const filePath = fileURLToPath(fileURL);
 
-    const file = await findFiles(dirname(filePath), { fileName: basename(filePath), extensions })
+    const file = await findFiles(dirname(filePath), {
+      fileName: basename(filePath),
+      extensions,
+    });
     return {
-      url: file.href
+      url: file.href,
     };
   }
 
@@ -63,7 +66,7 @@ export async function resolve(
 export async function dynamicInstantiate(url: string) {
   // Create a Node.JS Require using the `node_modules` folder as the base URL.
   const require = createRequire(
-    `${url.split('/node_modules/')[0].replace('file://', '')}/node_modules/`
+    `${url.split('/node_modules/')[0].replace('file://', '')}/node_modules/`,
   );
 
   // Import the module file path
@@ -75,7 +78,7 @@ export async function dynamicInstantiate(url: string) {
   if (dynModule.default)
     dynModule = {
       ...dynModule.default,
-      ...dynModule
+      ...dynModule,
     };
 
   const linkKeys = Object.keys(dynModule);
@@ -86,19 +89,19 @@ export async function dynamicInstantiate(url: string) {
       module.default.set(dynModule);
       // For all elements in the import set the module's key.
       for (const linkKey of linkKeys) module[linkKey].set(dynModule[linkKey]);
-    }
+    },
   };
 }
 
 export async function getFormat(
   url: string,
   context: never,
-  defaultGetFormat: Function
+  defaultGetFormat: Function,
 ) {
   // If it's a TypeScript extension then force `module` mode.
   if (extensionsRegex.test(url)) {
     return {
-      format: 'module'
+      format: 'module',
     };
   }
 
@@ -108,7 +111,7 @@ export async function getFormat(
    */
   if (url.includes('node_modules')) {
     return {
-      format: 'dynamic'
+      format: 'dynamic',
     };
   }
 
@@ -119,7 +122,7 @@ export async function getFormat(
 export async function transformSource(
   source: Source,
   context: TransformContext,
-  defaultTransformSource: Function
+  defaultTransformSource: Function,
 ): Promise<TransformResponse> {
   // Only transform TypeScript Modules
   if (extensionsRegex.test(context.url)) {
@@ -131,12 +134,12 @@ export async function transformSource(
     // Transpile the source code that Node passed to us.
     const transpiledModule = ts.transpileModule(source.toString(), {
       compilerOptions: tsConfig,
-      reportDiagnostics: true
+      reportDiagnostics: true,
     });
 
     // TODO: Actually "check" the TypeScript Code.
     return {
-      source: transpiledModule.outputText
+      source: transpiledModule.outputText,
     };
   }
 

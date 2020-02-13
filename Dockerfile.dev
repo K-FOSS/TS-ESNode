@@ -9,10 +9,16 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Install Shadow non busybox for better user management & support
-RUN apk add --no-cache shadow
+RUN apk add --no-cache shadow git
 
 # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
 RUN groupadd -g $USER_GID $USERNAME \
   && useradd -s /bin/sh -K MAIL_DIR=/dev/null -u $USER_UID -g $USER_GID -m $USERNAME
+
+# Add Sudo to allow occasional usage of root. I wish I could remove this but I can't seem to get the node_modules volume working correctly.
+RUN apk add --no-cache sudo \
+  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+  && chmod 0440 /etc/sudoers.d/$USERNAME
+
 
 CMD [ "tail", "-f", "/dev/null" ]
