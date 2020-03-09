@@ -1,6 +1,6 @@
 # TS-ESNode
 
-This is a proof of concept Node.JS Loader hook for Node.JS 13.7 or newer that transpiles TypeScript files into JavaScript using the `getFormat`, `resolve`, and `transformSource` hooks.
+This is a Node.JS Loader hook for Node.JS 13.7 or newer that transpiles TypeScript files into JavaScript using the `getFormat`, `resolve`, and `transformSource` hooks.
 
 ## Usage
 
