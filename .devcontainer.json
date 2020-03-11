@@ -15,7 +15,7 @@
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
   "mounts": [
-    "source=try-node-node_modules,target=/workspace/node_modules,type=volume"
+    "source=ts-esnode-modules,target=/workspace/node_modules,type=volume"
   ],
   "postCreateCommand": "sudo chown node node_modules && npm i"
 }

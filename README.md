@@ -20,6 +20,12 @@ Create a `dev` script in `package.json`
 
 Now when you run `npm run dev` then you should be running your TypeScript source without having to transpile it while still retaining Node.JS ESModule & ESNext module mode.
 
+## Development
+
+Development is intened to be done using VSCode with the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extensions.
+
+When you open this folder in VSCode you should get a notication to reopen in container. Click the reopen in container button to build the development contianer and launch VSCode in remote coding.
+
 ## Testing
 
 **MUST HAVE NODE.JS v13.7 or newer**
