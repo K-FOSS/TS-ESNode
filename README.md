@@ -26,6 +26,14 @@ Development is intened to be done using VSCode with the [Remote - Containers](ht
 
 When you open this folder in VSCode you should get a notication to reopen in container. Click the reopen in container button to build the development contianer and launch VSCode in remote coding.
 
+### TODO
+
+- I would really like to remove the hack to support destructed imports of legacy node_modules, see [this comment](https://github.com/K-FOSS/TS-ESNode/issues/1#issuecomment-596750379) for more information.
+
+- Worker Threads to avoid the TypeScript compiling affecting main thread.
+
+- Performance improvements. (Better file/import finding.)
+
 ## Testing
 
 **MUST HAVE NODE.JS v13.7 or newer**
