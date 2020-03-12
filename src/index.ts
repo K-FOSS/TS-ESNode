@@ -1,25 +1,33 @@
 // src/index.ts
 import { createRequire } from 'module';
 import { basename, dirname } from 'path';
-import ts from 'typescript';
 import { fileURLToPath, pathToFileURL, URL } from 'url';
 import { findFiles } from './findFiles';
+import { transpileTypeScript } from './Library/transpileSource';
 import {
+  DynamicInstantiateResponse,
+  GetFormatHook,
+  GetFormatResponse,
+  ModuleFormat,
   ResolveContext,
   ResolveResponse,
   Source,
-  TransformContext,
-  TransformResponse,
+  TransformSourceContext,
+  TransformSourceHook,
+  TransformSourceResponse,
 } from './types';
-import { getTSConfig } from './Utils';
 
-const rootModulePath = `${process.cwd()}/`;
-const baseURL = pathToFileURL(rootModulePath).href;
+const baseURL = pathToFileURL(`${process.cwd()}/`).href;
 
 const relativePathRegex = /^\.{0,2}[/]/;
 
 // TODO: Allow customization of extensions
 const extensions = ['.ts', '.tsx'];
+
+/**
+ * Pull in the extension array and create a Regular Expression to test for files.
+ * @constant
+ */
 const extensionsRegex = new RegExp(`\\${extensions.join('$|\\')}$`);
 
 // Custom resolver to allow `.ts` and `.tsx` extensions, along with finding files if no extension is provided.
@@ -41,6 +49,8 @@ export async function resolve(
 
   /**
    * If no extension is passed and is a relative import then let's try to find a `.ts` or `.tsx` file at the path
+   *
+   * // TODO: Find a better way to not pass possible JavaScript files to the findFiles functionx
    */
   if (relativePathRegex.test(specifier) && !specifier.startsWith('file:')) {
     const fileURL = new URL(specifier, parentURL);
@@ -63,13 +73,17 @@ export async function resolve(
  * This dynamically imports the `node_modules` module and creates a dynamic module with all the same exports.
  * @param url fileURL given by Node.JS
  */
-export async function dynamicInstantiate(url: string) {
+export async function dynamicInstantiate(
+  url: string,
+): Promise<DynamicInstantiateResponse> {
+  // TODO: Fix this hack to allow Yarn2 to work
   // Create a Node.JS Require using the `node_modules` folder as the base URL.
   const require = createRequire(
     `${url.split('/node_modules/')[0].replace('file://', '')}/node_modules/`,
   );
 
   // Import the module file path
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   let dynModule = require(url.replace(/.*\/node_modules\//, ''));
 
   /**
@@ -85,23 +99,26 @@ export async function dynamicInstantiate(url: string) {
 
   return {
     exports: [...linkKeys, 'default'],
-    execute: (module: any) => {
-      module.default.set(dynModule);
+    execute: (dynamicModule: {
+      [key: string]: { set: (moduleMap: typeof dynModule[string]) => void };
+    }) => {
+      dynamicModule.default.set(dynModule);
       // For all elements in the import set the module's key.
-      for (const linkKey of linkKeys) module[linkKey].set(dynModule[linkKey]);
+      for (const linkKey of linkKeys)
+        dynamicModule[linkKey].set(dynModule[linkKey]);
     },
   };
 }
 
 export async function getFormat(
   url: string,
-  context: never,
-  defaultGetFormat: Function,
-) {
+  context: object,
+  defaultGetFormat: GetFormatHook,
+): Promise<GetFormatResponse> {
   // If it's a TypeScript extension then force `module` mode.
   if (extensionsRegex.test(url)) {
     return {
-      format: 'module',
+      format: ModuleFormat.MODULE,
     };
   }
 
@@ -110,8 +127,15 @@ export async function getFormat(
    * anything exported by TypeScript not being accepted by the exports check in Node
    */
   if (url.includes('node_modules')) {
+    const defaultFormat = await defaultGetFormat(
+      url,
+      context,
+      defaultGetFormat,
+    );
+    if (defaultFormat.format === ModuleFormat.MODULE) return defaultFormat;
+
     return {
-      format: 'dynamic',
+      format: ModuleFormat.DYNAMIC,
     };
   }
 
@@ -119,28 +143,33 @@ export async function getFormat(
   return defaultGetFormat(url, context, defaultGetFormat);
 }
 
+/**
+ * Transforms the incoming source into raw ESNext code if possible
+ * @param source Source passed from Node.JS
+ * @param context
+ * @param defaultTransformSource Default function passed by Node.JS if we don't want to handle this ourselves
+ */
 export async function transformSource(
   source: Source,
-  context: TransformContext,
-  defaultTransformSource: Function,
-): Promise<TransformResponse> {
+  context: TransformSourceContext,
+  defaultTransformSource: TransformSourceHook,
+): Promise<TransformSourceResponse> {
   // Only transform TypeScript Modules
   if (extensionsRegex.test(context.url)) {
-    const sourceFilePath = fileURLToPath(context.url);
+    // const sourceFilePath = fileURLToPath(context.url);
 
-    // Load the closest `tsconfig.json` to the source file
-    const tsConfig = getTSConfig(dirname(sourceFilePath));
+    // // Load the closest `tsconfig.json` to the source file
+    // const tsConfig = getTSConfig(dirname(sourceFilePath));
 
-    // Transpile the source code that Node passed to us.
-    const transpiledModule = ts.transpileModule(source.toString(), {
-      compilerOptions: tsConfig,
-      reportDiagnostics: true,
-    });
+    // // Transpile the source code that Node passed to us.
+    // const transpiledModule = ts.transpileModule(source.toString(), {
+    //   compilerOptions: tsConfig,
+    //   reportDiagnostics: true,
+    // });
 
     // TODO: Actually "check" the TypeScript Code.
-    return {
-      source: transpiledModule.outputText,
-    };
+
+    return transpileTypeScript(source, context);
   }
 
   // Defer to Node.js for all other sources.

@@ -34,6 +34,8 @@ When you open this folder in VSCode you should get a notication to reopen in con
 
 - Performance improvements. (Better file/import finding.)
 
+Bunch more TODOs are documented in code, open repo and launch container, Todo Tree is added to the Dev container automatically.
+
 ## Testing
 
 **MUST HAVE NODE.JS v13.7 or newer**
