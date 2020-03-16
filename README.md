@@ -2,6 +2,8 @@
 
 This is a Node.JS Loader hook for Node.JS 13.7 or newer that transpiles TypeScript files into JavaScript using the `getFormat`, `resolve`, and `transformSource` hooks.
 
+TO REMOVE
+
 ## Usage
 
 You should already have `"type": "module"` in your `package.json`
