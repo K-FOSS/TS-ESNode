@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: k-foss/npm-run-action
+      - uses: k-foss/npm-run-action@master
         with:
           scriptName: 'prepare'
           scriptPath: 'test/'
-      - uses: k-foss/npm-run-action
+      - uses: k-foss/npm-run-action@master
         with:
           scriptName: 'try'
