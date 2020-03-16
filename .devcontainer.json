@@ -1,5 +1,5 @@
 {
-  "name": "API Container",
+  "name": "TS-ESNode Container",
   "dockerFile": "./Dockerfile.dev",
   "settings": {
     // This dev container does include /bin/bash if you prefer to use it instead of ash.
@@ -10,7 +10,11 @@
     "SHELL": "/bin/sh"
   },
 
-  "extensions": ["esbenp.prettier-vscode"],
+  "extensions": [
+    "esbenp.prettier-vscode",
+    "gruntfuggly.todo-tree",
+    "dbaeumer.vscode-eslint"
+  ],
   "remoteUser": "node",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",

@@ -11,9 +11,22 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^13.7.1",
+    "@types/node": "^13.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^25.1.0",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.5"
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
   },
   "peerDependencies": {
     "typescript": "^3.7.5"
@@ -40,7 +53,42 @@
     "loader-hook",
     "ts",
     "node",
+    "esmodule",
+    "ts-node",
     "runtime",
     "environment"
-  ]
+  ],
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "tsconfigRootDir": "."
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "prettier",
+      "jest"
+    ],
+    "extends": [
+      "standard",
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "prettier/standard",
+      "prettier/@typescript-eslint"
+    ],
+    "rules": {
+      "@typescript-eslint/explicit-function-return-type": [
+        "error",
+        {
+          "allowExpressions": true
+        }
+      ],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "args": "none"
+        }
+      ]
+    }
+  }
 }
