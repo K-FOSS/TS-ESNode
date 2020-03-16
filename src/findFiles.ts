@@ -55,7 +55,7 @@ export async function findFiles(
     [...extensions, ...JS_EXTS].includes(directoryFileName.split(fileName)[1]),
   );
 
-  // If the are less or more then one search results then throw error
+  // If the are less or more then one search result then throw error
   if (matchedFiles.length !== 1)
     throw new Error(`Invalid file. ${fileName} not found at path: ${path}`);
 

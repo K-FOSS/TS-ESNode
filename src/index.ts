@@ -154,21 +154,7 @@ export async function transformSource(
   context: TransformSourceContext,
   defaultTransformSource: TransformSourceHook,
 ): Promise<TransformSourceResponse> {
-  // Only transform TypeScript Modules
   if (extensionsRegex.test(context.url)) {
-    // const sourceFilePath = fileURLToPath(context.url);
-
-    // // Load the closest `tsconfig.json` to the source file
-    // const tsConfig = getTSConfig(dirname(sourceFilePath));
-
-    // // Transpile the source code that Node passed to us.
-    // const transpiledModule = ts.transpileModule(source.toString(), {
-    //   compilerOptions: tsConfig,
-    //   reportDiagnostics: true,
-    // });
-
-    // TODO: Actually "check" the TypeScript Code.
-
     return transpileTypeScript(source, context);
   }
 
