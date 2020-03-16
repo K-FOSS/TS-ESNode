@@ -1,24 +1,9 @@
-
-FROM mhart/alpine-node:13
-# This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
-# property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
-# will be updated to match your local UID/GID (when using the dockerFile property).
-# See https://aka.ms/vscode-remote/containers/non-root-user for details.
-ARG USERNAME=node
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
-# Install Shadow non busybox for better user management & support
-RUN apk add --no-cache shadow git
-
-# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
-RUN groupadd -g $USER_GID $USERNAME \
-  && useradd -s /bin/sh -K MAIL_DIR=/dev/null -u $USER_UID -g $USER_GID -m $USERNAME
+FROM node:alpine3.11
+RUN apk add --no-cache git
 
 # Add Sudo to allow occasional usage of root. I wish I could remove this but I can't seem to get the node_modules volume working correctly.
 RUN apk add --no-cache sudo \
-  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-  && chmod 0440 /etc/sudoers.d/$USERNAME
-
+  && echo node ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/node \
+  && chmod 0440 /etc/sudoers.d/node
 
 CMD [ "tail", "-f", "/dev/null" ]

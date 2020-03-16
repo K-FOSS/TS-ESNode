@@ -1,5 +1,5 @@
 {
-  "name": "API Container",
+  "name": "TS-ESNode Container",
   "dockerFile": "./Dockerfile.dev",
   "settings": {
     // This dev container does include /bin/bash if you prefer to use it instead of ash.
