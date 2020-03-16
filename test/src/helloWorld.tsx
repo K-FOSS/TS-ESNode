@@ -1,4 +1,4 @@
-import React from 'react';
+import React from '@pika/react';
 
 export function CoreApp(): React.ReactElement {
   return (

@@ -2,7 +2,7 @@
 import { createRequire } from 'module';
 import { basename, dirname } from 'path';
 import ts from 'typescript';
-import { fileURLToPath, pathToFileURL, URL } from 'url';
+import { fileURLToPath, pathToFileURL, URL, format } from 'url';
 import { findFiles } from './findFiles';
 import {
   ResolveContext,
@@ -10,6 +10,7 @@ import {
   Source,
   TransformContext,
   TransformResponse,
+  ModuleFormat,
 } from './types';
 import { getTSConfig } from './Utils';
 
@@ -93,30 +94,40 @@ export async function dynamicInstantiate(url: string) {
   };
 }
 
+const formatCache = new Map<string, ModuleFormat>();
+
 export async function getFormat(
   url: string,
   context: never,
   defaultGetFormat: Function,
 ) {
+  let format = formatCache.get(url);
+  if (format) return { format };
+
   // If it's a TypeScript extension then force `module` mode.
-  if (extensionsRegex.test(url)) {
-    return {
-      format: 'module',
+  if (extensionsRegex.test(url)) format = 'module';
+
+  if (!format) {
+    const defaultResolve = defaultGetFormat(url, context, defaultGetFormat) as {
+      format: ModuleFormat;
     };
+    format = defaultResolve.format;
+
+    /**
+     * We need to use our dynamic hook on Node.JS CommonJS `node_modules` due to
+     * anything exported by TypeScript not being accepted by the exports check in Node
+     */
+    if (url.includes('node_modules') && format === 'commonjs') {
+      format = 'dynamic';
+    }
   }
 
-  /**
-   * We need to use our dynamic hook on Node.JS CommonJS `node_modules` due to
-   * anything exported by TypeScript not being accepted by the exports check in Node
-   */
-  if (url.includes('node_modules')) {
-    return {
-      format: 'dynamic',
-    };
-  }
+  formatCache.set(url, format);
 
   // Let Node.js handle all other URLs.
-  return defaultGetFormat(url, context, defaultGetFormat);
+  return {
+    format,
+  };
 }
 
 export async function transformSource(

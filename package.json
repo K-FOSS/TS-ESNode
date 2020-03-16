@@ -11,12 +11,12 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^13.7.1",
+    "@types/node": "^13.9.1",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "typescript": "^3.7.5"
+    "typescript": ">=3.7"
   },
   "engines": {
     "node": ">= 13.7"
@@ -25,7 +25,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "tsc -p ./bin/",
     "build": "node --experimental-specifier-resolution=node ./out/build/build.js",
-    "pretry": "npm run build",
+    "pretry": "npm run build && cp ./test/extras/ReactPikaPKG.json ./test/node_modules/@pika/react/package.json",
     "try": "node --loader ./out/dist/index.js --experimental-specifier-resolution=node ./test/",
     "prepublishOnly": "npm run build"
   },

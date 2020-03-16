@@ -15,7 +15,7 @@ export function getTSConfig(modulePath: string): CompilerOptions {
       target: ts.ScriptTarget.ESNext,
       moduleResolution: ts.ModuleResolutionKind.NodeJs,
       allowJs: true,
-      skipLibCheck: true
+      skipLibCheck: true,
     };
   } else {
     const tsConfigFile = ts.readConfigFile(tsConfigPath, ts.sys.readFile)
@@ -23,7 +23,7 @@ export function getTSConfig(modulePath: string): CompilerOptions {
 
     tsConfigCache = ts.convertCompilerOptionsFromJson(
       tsConfigFile.compilerOptions,
-      pathDirname(tsConfigPath)
+      pathDirname(tsConfigPath),
     ).options;
   }
 

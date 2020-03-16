@@ -1,5 +1,13 @@
 // src/types.ts
 
+export type ModuleFormat =
+  | 'builtin'
+  | 'commonjs'
+  | 'dynamic'
+  | 'json'
+  | 'module'
+  | 'wasm';
+
 export type Source = string | Buffer;
 
 export interface ResolveContext {
