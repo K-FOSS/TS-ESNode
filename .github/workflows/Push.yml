@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  Test:
+    name: Test/Try
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: k-foss/npm-run-action
+        with:
+          scriptName: 'prepare'
+          scriptPath: 'test/'
+      - uses: k-foss/npm-run-action
+        with:
+          scriptName: 'try'
