@@ -17,7 +17,13 @@ async function startHelloWorld(): Promise<void> {
 
   console.log(`Result of Lab #2: `, lab2Result);
 
-  console.log('Importing helloWorld.tsx');
+  console.log('Importing Server.tsx');
+
+  const [{ renderUI }] = await Promise.all<typeof import('./Server')>([
+    import('./Server'),
+  ]);
+
+  console.log('Rendering UI', await renderUI());
 }
 
 startHelloWorld();

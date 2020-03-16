@@ -1,0 +1,44 @@
+{
+  "_from": "@pika/react",
+  "_id": "@pika/react@16.13.1",
+  "_inBundle": false,
+  "_integrity": "sha512-v33Ub2QxntNpDFRnkj3tCbT6jMb7Etu7LOMQO/YAulLRIDtDvJdMwuOVJDdPYUmDtWjfWOB5xSP7nl7k0BApbQ==",
+  "_location": "/@pika/react",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@pika/react",
+    "name": "@pika/react",
+    "escapedName": "@pika%2freact",
+    "scope": "@pika",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": ["#USER", "/"],
+  "_resolved": "https://registry.npmjs.org/@pika/react/-/react-16.13.1.tgz",
+  "_shasum": "20e47997d2a2f1e5da39a8e28b75db2ec77d99c6",
+  "_spec": "@pika/react",
+  "_where": "/workspace/test",
+  "bugs": {
+    "url": "https://github.com/facebook/react/issues"
+  },
+  "bundleDependencies": false,
+  "type": "module",
+  "dependencies": {},
+  "deprecated": false,
+  "description": "An actively maintained ESM build of React, the JavaScript library for building user interfaces.",
+  "homepage": "https://reactjs.org/",
+  "keywords": ["react"],
+  "license": "MIT",
+  "main": "source.production.js",
+  "module": "source.production.js",
+  "name": "@pika/react",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/facebook/react.git",
+    "directory": "packages/react"
+  },
+  "version": "16.13.1"
+}
