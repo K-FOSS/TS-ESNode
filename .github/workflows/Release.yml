@@ -1,0 +1,33 @@
+name: NPM Publish
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  Test:
+    name: Test/Try
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: k-foss/npm-run-action@master
+        with:
+          scriptName: 'prepare'
+          scriptPath: 'test/'
+      - uses: k-foss/npm-run-action@master
+        with:
+          scriptName: 'try'
+  Publish:
+    name: NPM Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1.4.1
+        with:
+          node-version: '13.11'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm install
+      - run: npm publish --access public
+        # for publishing, npm need authorization. We add the NPM token to the environment which will take care of authorization to publish to the package
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
