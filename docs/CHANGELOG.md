@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.0...v1.3.1) (2020-03-28)
+
+
+### Bug Fixes
+
+* **Release:** Include updated package.json in Git ([88f8b1a](https://github.com/K-FOSS/TS-ESNode/commit/88f8b1a896966c1986f6136c236676a26147ddd0))
+
 # [1.3.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.2.2...v1.3.0) (2020-03-28)
 
 
