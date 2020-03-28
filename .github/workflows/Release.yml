@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - ci(semantic-release)-setup
 
 jobs:
   Test:
@@ -28,9 +27,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm ci
-      - uses: k-foss/npm-run-action@master
-        with:
-          scriptName: 'test'
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
