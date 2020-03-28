@@ -1,5 +1,10 @@
 # TS-ESNode
 
+[![Renovate Status](https://badges.renovateapi.com/github/K-FOSS/TS-ESNode)](https://renovatebot.com/)
+![Code Quality](https://github.com/K-FOSS/TS-ESNode/workflows/Code%20Quality/badge.svg)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+![Libraries.io dependency status for latest release, scoped npm package](https://img.shields.io/librariesio/release/npm/@k-foss/ts-esnode)
+
 This is a Node.JS Loader hook for Node.JS 13.7 or newer that transpiles TypeScript files into JavaScript using the `getFormat`, `resolve`, and `transformSource` hooks.
 
 ## Usage
