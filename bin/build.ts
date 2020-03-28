@@ -4,9 +4,9 @@ import { promises as fs } from 'fs';
 import { resolve as resolvePath } from 'path';
 
 const formatHost: ts.FormatDiagnosticsHost = {
-  getCanonicalFileName: path => path,
+  getCanonicalFileName: (path) => path,
   getCurrentDirectory: ts.sys.getCurrentDirectory,
-  getNewLine: () => ts.sys.newLine
+  getNewLine: () => ts.sys.newLine,
 };
 
 function reportDiagnostic(diagnostic: ts.Diagnostic) {
@@ -16,8 +16,8 @@ function reportDiagnostic(diagnostic: ts.Diagnostic) {
     ':',
     ts.flattenDiagnosticMessageText(
       diagnostic.messageText,
-      formatHost.getNewLine()
-    )
+      formatHost.getNewLine(),
+    ),
   );
 }
 
@@ -37,14 +37,15 @@ function reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
 function getTextForDiagnostic(diagnostic: ts.Diagnostic): string {
   if (diagnostic.file) {
     const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-      diagnostic.start!
+      diagnostic.start!,
     );
     const message = ts.flattenDiagnosticMessageText(
       diagnostic.messageText,
-      '\n'
+      '\n',
     );
-    return `${diagnostic.file.fileName} (${line + 1},${character +
-      1}): ${message}`;
+    return `${diagnostic.file.fileName} (${line + 1},${
+      character + 1
+    }): ${message}`;
   } else {
     return `${ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`;
   }
@@ -62,11 +63,11 @@ async function buildTS_ESNode(): Promise<void> {
     undefined,
     undefined,
     reportDiagnostic,
-    reportSolutionBuilderStatus
+    reportSolutionBuilderStatus,
   );
 
   const solution = ts.createSolutionBuilder(host, [configPath], {
-    verbose: true
+    verbose: true,
   });
 
   const buildStatus = solution.build();
