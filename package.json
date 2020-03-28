@@ -47,9 +47,5 @@
     "node",
     "runtime",
     "environment"
-  ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "tag": "beta"
-  }
+  ]
 }
