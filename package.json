@@ -36,7 +36,7 @@
     "name": "Kristian Jones",
     "url": "https://kristianjones.dev"
   },
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [
     "typescript",
     "loader-hook",
