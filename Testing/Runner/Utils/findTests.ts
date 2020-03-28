@@ -20,9 +20,8 @@ export async function findTests(): Promise<Test[]> {
     const testPath = resolvePath(testsPath, dirContent.name);
     const testPkgPath = resolvePath(testPath, 'package.json');
 
-    const { default: testPkg } = (await import(
-      testPkgPath
-    )) as TestPackageImport;
+    const testPkgFile = await fs.readFile(testPkgPath);
+    const testPkg = JSON.parse(testPkgFile.toString());
 
     const testMainPath = resolvePath(testPath, testPkg.main);
 
