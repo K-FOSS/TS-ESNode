@@ -38,8 +38,9 @@ export function getTextForDiagnostic(diagnostic: ts.Diagnostic): string {
       diagnostic.messageText,
       '\n',
     );
-    return `${diagnostic.file.fileName} (${line + 1},${character +
-      1}): ${message}`;
+    return `${diagnostic.file.fileName} (${line + 1},${
+      character + 1
+    }): ${message}`;
   } else {
     return `${ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`;
   }
