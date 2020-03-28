@@ -76,16 +76,17 @@ export async function dynamicInstantiate(url: string) {
   /**
    * This is needed to allow for default exports in CommonJS modules.
    */
-  if (dynModule.default)
+  if (dynModule.default && dynModule !== dynModule.default)
     dynModule = {
       ...dynModule.default,
       ...dynModule,
     };
 
   const linkKeys = Object.keys(dynModule);
+  const exports = dynModule.default ? linkKeys : [...linkKeys, 'default'];
 
   return {
-    exports: [...linkKeys, 'default'],
+    exports,
     execute: (module: any) => {
       module.default.set(dynModule);
       // For all elements in the import set the module's key.
