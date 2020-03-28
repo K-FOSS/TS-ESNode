@@ -11,9 +11,9 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^13.9.5",
+    "@types/node": "13.9.1",
     "prettier": "^2.0.2",
-    "typescript": "^3.8.3"
+    "typescript": "3.8.3"
   },
   "peerDependencies": {
     "typescript": ">=3.7"
@@ -28,7 +28,8 @@
     "build": "node --experimental-specifier-resolution=node ./out/build/build.js",
     "pretry": "",
     "try": "node --loader ./out/dist/index.js --experimental-specifier-resolution=node ./test/",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prettier": "prettier --config .prettierrc --check 'src/**/*ts' 'bin/**/*.ts'"
   },
   "author": {
     "email": "me@kristianjones.dev",
