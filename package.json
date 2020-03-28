@@ -27,7 +27,8 @@
     "build": "node --experimental-specifier-resolution=node ./out/build/build.js",
     "pretry": "npm run build && cp ./test/extras/ReactPikaPKG.json ./test/node_modules/@pika/react/package.json",
     "try": "node --loader ./out/dist/index.js --experimental-specifier-resolution=node ./test/",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prettier": "prettier -c 'src/**/*ts' 'bin/**/*.ts'"
   },
   "author": {
     "email": "me@kristianjones.dev",
