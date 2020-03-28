@@ -1,7 +1,8 @@
 // Testing/Runner/Utils/findTests.ts
 import { promises as fs } from 'fs';
 import { resolve as resolvePath } from 'path';
-import { Test, TestPackageImport } from './Test';
+import { run } from './run';
+import { Test } from './Test';
 
 /**
  * Path to Testing/Tests folder containing all the test folders.
@@ -13,6 +14,7 @@ export async function findTests(): Promise<Test[]> {
   console.debug(`Finding tests.`);
 
   const tests: Test[] = [];
+  const npmInstalls: Promise<unknown>[] = [];
 
   for (const dirContent of dirContents) {
     if (!dirContent.isDirectory()) continue;
@@ -30,7 +32,15 @@ export async function findTests(): Promise<Test[]> {
       nodeOptions: testPkg.NODE_OPTIONS,
       path: testMainPath,
     });
+
+    npmInstalls.push(
+      run('npm install', {
+        cwd: testPath,
+      }),
+    );
   }
+
+  await Promise.all(npmInstalls);
 
   return tests;
 }

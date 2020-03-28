@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "echo 'Hello'"
+    "postinstall": "cp ./extras/ReactPikaPKG.json ./node_modules/@pika/react/package.json"
   },
   "author": "",
   "license": "ISC",
