@@ -18,9 +18,16 @@ async function findFileReadDir(
   const directoryFiles = await fs.readdir(cwd);
 
   // Filter the diretory files to only thoose with passed extenison and `.js` or `.jsx`
-  const matchedFiles = directoryFiles.filter((directoryFileName) =>
-    [...extensions, ...JS_EXTS].includes(directoryFileName.split(fileName)[1]),
-  );
+  const matchedFiles = directoryFiles.filter((directoryFileName) => {
+    for (let extension of [...extensions, ...JS_EXTS]) {
+      if(directoryFileName === fileName + extension){
+        return true;
+      }
+    }
+
+    return false;
+  });
+    
   if (matchedFiles.length > 1 || matchedFiles.length < 1) return undefined;
 
   return resolvePath(cwd, matchedFiles[0]);
