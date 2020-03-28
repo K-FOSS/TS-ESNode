@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.2.2...v1.3.0) (2020-03-28)
+
+
+### Features
+
+* Setup automated relases ([508d2c0](https://github.com/K-FOSS/TS-ESNode/commit/508d2c071b1075c9af2ab7144bf1d3a37225a8ae))
+
 ## [1.2.2](https://github.com/K-FOSS/TS-ESNode/compare/v1.2.1...v1.2.2) (2020-03-28)
 
 
