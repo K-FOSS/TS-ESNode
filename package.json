@@ -28,7 +28,7 @@
     "pretry": "npm run build && cp ./test/extras/ReactPikaPKG.json ./test/node_modules/@pika/react/package.json",
     "try": "node --loader ./out/dist/index.js --experimental-specifier-resolution=node ./test/",
     "prepublishOnly": "npm run build",
-    "prettier": "prettier -c 'src/**/*ts' 'bin/**/*.ts'"
+    "prettier": "prettier --config .prettierrc --check 'src/**/*ts' 'bin/**/*.ts'"
   },
   "author": {
     "email": "me@kristianjones.dev",
