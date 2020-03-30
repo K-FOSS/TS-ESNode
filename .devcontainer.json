@@ -10,10 +10,13 @@
     "SHELL": "/bin/sh"
   },
 
-  "extensions": ["esbenp.prettier-vscode"],
+  "extensions": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
+
   "remoteUser": "node",
+
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
+
   "mounts": [
     "source=ts-esnode-modules,target=/workspace/node_modules,type=volume"
   ],
