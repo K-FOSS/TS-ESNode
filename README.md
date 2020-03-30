@@ -5,7 +5,7 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![Libraries.io dependency status for latest release, scoped npm package](https://img.shields.io/librariesio/release/npm/@k-foss/ts-esnode)
 
-This is a Node.JS Loader hook for Node.JS 13.7 or newer that transpiles TypeScript files into JavaScript using the `getFormat`, `resolve`, and `transformSource` hooks.
+This is a Node.JS Loader hook for Node.JS 13.9 or newer that transpiles TypeScript files into JavaScript using the `getFormat`, `resolve`, and `transformSource` hooks.
 
 ## Usage
 
@@ -41,7 +41,7 @@ When you open this folder in VSCode you should get a notication to reopen in con
 
 ### Testing
 
-**MUST HAVE NODE.JS v13.7 or newer**
+**MUST HAVE NODE.JS v13.9 or newer**
 
 To try this out, clone repo
 
