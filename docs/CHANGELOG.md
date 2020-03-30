@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.1...v1.3.2) (2020-03-30)
+
+
+### Bug Fixes
+
+* **Resovler:** Refactor resolver and module loader to prevent loading of URLs and already discovered javascript files ([#28](https://github.com/K-FOSS/TS-ESNode/issues/28)) ([4825f19](https://github.com/K-FOSS/TS-ESNode/commit/4825f19e305081d340fb68629a5e5ba813555f46))
+
 ## [1.3.1](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.0...v1.3.1) (2020-03-28)
 
 
