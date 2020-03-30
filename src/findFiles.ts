@@ -8,6 +8,8 @@ interface FileRule {
   extensions: string[];
 }
 
+const JS_EXTS = ['.js', '.jsx'];
+
 async function findFile(
   cwd: string,
   { fileName, extensions }: FileRule,
@@ -22,7 +24,7 @@ async function findFile(
     if (directoryEntry.name.includes(fileName)) {
       if (directoryEntry.isDirectory()) return true;
 
-      for (let extension of extensions) {
+      for (let extension of [...extensions, ...JS_EXTS]) {
         if (directoryFileName === fileName + extension) {
           return true;
         }
