@@ -3,8 +3,6 @@ import { promises as fs } from 'fs';
 import { resolve as resolvePath } from 'path';
 import { pathToFileURL, URL } from 'url';
 
-const JS_EXTS = ['.js', '.jsx'];
-
 interface FileRule {
   fileName: string;
   extensions: string[];
@@ -24,7 +22,7 @@ async function findFile(
     if (directoryEntry.name.includes(fileName)) {
       if (directoryEntry.isDirectory()) return true;
 
-      for (let extension of [...extensions, ...JS_EXTS]) {
+      for (let extension of extensions) {
         if (directoryFileName === fileName + extension) {
           return true;
         }
