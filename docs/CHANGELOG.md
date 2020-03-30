@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.2...v1.3.3) (2020-03-30)
+
+
+### Bug Fixes
+
+* Readd JS_EXTS to findFIles to allow for post build JS support ([82b27c0](https://github.com/K-FOSS/TS-ESNode/commit/82b27c04432ccd2b3a5e065927bfcf9f5ebcb24a))
+
 ## [1.3.2](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.1...v1.3.2) (2020-03-30)
 
 
