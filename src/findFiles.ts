@@ -22,7 +22,9 @@ async function findFile(
     const directoryFileName = directoryEntry.name;
 
     if (directoryEntry.name.includes(fileName)) {
-      if (directoryEntry.isDirectory()) return true;
+      if (directoryEntry.name === fileName && directoryEntry.isDirectory()) {
+        return true;
+      }
 
       for (let extension of [...extensions, ...JS_EXTS]) {
         if (directoryFileName === fileName + extension) {
