@@ -1,3 +1,10 @@
+## [1.3.5](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.4...v1.3.5) (2020-04-05)
+
+
+### Bug Fixes
+
+* **resolve:** Don't run findFiles if we can already see an extension. ([b0e2b85](https://github.com/K-FOSS/TS-ESNode/commit/b0e2b850487d91b4ef8f101d64ef481689d5c875))
+
 ## [1.3.4](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.3...v1.3.4) (2020-04-05)
 
 
