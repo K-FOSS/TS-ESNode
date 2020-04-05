@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.3...v1.3.4) (2020-04-05)
+
+
+### Bug Fixes
+
+* **findFiles:** Fix the discovery of files when a directory of partial name match occurs ([2f108e2](https://github.com/K-FOSS/TS-ESNode/commit/2f108e26c4218af3079c265741f5dcca45e343ba))
+
 ## [1.3.3](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.2...v1.3.3) (2020-03-30)
 
 
