@@ -18,11 +18,10 @@ const rootModulePath = `${process.cwd()}/`;
 const baseURL = pathToFileURL(rootModulePath).href;
 
 const relativePathRegex = /^\.{1,2}[/]/;
-const hasExtensionRegex = /\.\w+$/;
 
 // TODO: Allow customization of extensions
 const extensions = ['.ts', '.tsx'];
-const extensionsRegex = new RegExp(`\\${extensions.join('|\\')}`);
+const extensionsRegex = new RegExp(`\\${extensions.join('$|\\')}`);
 
 // Custom resolver to allow `.ts` and `.tsx` extensions, along with finding files if no extension is provided.
 export async function resolve(
@@ -40,14 +39,14 @@ export async function resolve(
     // Node.js normally errors on unknown file extensions, so return a URL for
     // specifiers ending in the TypeScript file extensions.
     return {
-      url: resolvedUrl.href,
+      url: new URL(specifier, parentURL).href,
     };
   }
 
   /**
    * If no extension is passed and is a relative import then let's try to find a `.ts` or `.tsx` file at the path
    */
-  if (relativePathRegex.test(specifier) && !hasExtensionRegex.test(fileName)) {
+  if (relativePathRegex.test(specifier)) {
     const filePath = fileURLToPath(resolvedUrl);
 
     const file = await findFiles(dirname(filePath), {
