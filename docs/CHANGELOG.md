@@ -1,3 +1,37 @@
+# [1.4.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.7...v1.4.0) (2020-05-12)
+
+
+### Features
+
+* Force release ([58f3d3b](https://github.com/K-FOSS/TS-ESNode/commit/58f3d3b6d268ce1e260a16715cab5b0b5ccc79ca))
+
+
+### Reverts
+
+* Revert "chore(branches): Setup Next branch" ([b3a2345](https://github.com/K-FOSS/TS-ESNode/commit/b3a2345131a210f5213ce8d81ec1e7b4a2cbc2cf))
+* Revert "fix(Resovler): Refactor resolver and module loader to prevent loading of URLs and already discovered javascript files (#28)" ([2aa2df8](https://github.com/K-FOSS/TS-ESNode/commit/2aa2df8438107c1c4ef491eb3b6f8233f7638669)), closes [#28](https://github.com/K-FOSS/TS-ESNode/issues/28)
+* Revert "refactor: Remove Node 13.7/13.8 from supported versions" ([c0916b6](https://github.com/K-FOSS/TS-ESNode/commit/c0916b63434977c3f9612f476f14e202db85932d))
+* Revert "chore(release): 1.3.2 [skip ci]" ([e112a8d](https://github.com/K-FOSS/TS-ESNode/commit/e112a8dd40192970f4aefaea218e078a3d8e0c34))
+* Revert "fix: Readd JS_EXTS to findFIles to allow for post build JS support" ([ed01c06](https://github.com/K-FOSS/TS-ESNode/commit/ed01c060f148f54c076939095d37344385c26841))
+* Revert "chore(release): 1.3.3 [skip ci]" ([2e29ee2](https://github.com/K-FOSS/TS-ESNode/commit/2e29ee2d7f8fb04074234574ac7afc8f50ae4fb2))
+* Revert "chore(deps-dev): bump @types/node from 13.9.5 to 13.9.8 (#29)" ([06561dc](https://github.com/K-FOSS/TS-ESNode/commit/06561dc640e2b2f14ec65d80bb9e88146b667169)), closes [#29](https://github.com/K-FOSS/TS-ESNode/issues/29)
+* Revert "chore(deps-dev): bump @types/node from 13.9.8 to 13.11.0 (#30)" ([8050e6e](https://github.com/K-FOSS/TS-ESNode/commit/8050e6ecc31e875c8e1de8c6156d8cd84824d3d7)), closes [#30](https://github.com/K-FOSS/TS-ESNode/issues/30)
+* Revert "tests(Similar Folder): Add a test for similar folder names when searching for a file (should fail currently)" ([aa94c10](https://github.com/K-FOSS/TS-ESNode/commit/aa94c10949d32f2f82708fcd7b027336ada8021b))
+* Revert "fix(findFiles): Fix the discovery of files when a directory of partial name match occurs" ([f51c084](https://github.com/K-FOSS/TS-ESNode/commit/f51c08468a9f4296be89d1192094aab6d010d46e))
+* Revert "chore(release): 1.3.4 [skip ci]" ([fa25197](https://github.com/K-FOSS/TS-ESNode/commit/fa251974d4191ee93874654110fb2dd98d8147ef))
+* Revert "fix(resolve): Don't run findFiles if we can already see an extension." ([3050146](https://github.com/K-FOSS/TS-ESNode/commit/3050146c5f454ecc277ca7a4b9b56dacfc5f14c7))
+* Revert "chore(release): 1.3.5 [skip ci]" ([044da67](https://github.com/K-FOSS/TS-ESNode/commit/044da677622491b02ef97e1d0cbe7376d6c4cf2a))
+* Revert "chore(deps-dev): bump @types/node from 13.11.0 to 13.11.1 (#35)" ([1b9eae8](https://github.com/K-FOSS/TS-ESNode/commit/1b9eae88be6bc46b58030e4e52f112b16a02da55)), closes [#35](https://github.com/K-FOSS/TS-ESNode/issues/35)
+* Revert "chore(deps-dev): bump prettier from 2.0.2 to 2.0.4 (#33)" ([9d37c8f](https://github.com/K-FOSS/TS-ESNode/commit/9d37c8fb82c2b02ef398f28e612e06e6e95d5f4f)), closes [#33](https://github.com/K-FOSS/TS-ESNode/issues/33)
+* Revert "chore(deps-dev): bump typescript from 3.8.3 to 3.9.2 (#50)" ([f962acf](https://github.com/K-FOSS/TS-ESNode/commit/f962acf41716ab59e11abeafb222f49247dfee73)), closes [#50](https://github.com/K-FOSS/TS-ESNode/issues/50)
+* Revert "chore(deps-dev): bump conventional-changelog-conventionalcommits (#49)" ([e6a4d8f](https://github.com/K-FOSS/TS-ESNode/commit/e6a4d8fbb410826f9f42a5a7af927ed2d09fd472)), closes [#49](https://github.com/K-FOSS/TS-ESNode/issues/49)
+* Revert "fix(dynamicInstantiate): works with pnpm (#45)" ([4a92673](https://github.com/K-FOSS/TS-ESNode/commit/4a92673656e1f159891271a6e2ca3b07b7f18f02)), closes [#45](https://github.com/K-FOSS/TS-ESNode/issues/45)
+* Revert "chore(release): 1.3.6 [skip ci]" ([a461c3b](https://github.com/K-FOSS/TS-ESNode/commit/a461c3bb5d71e54408a046365bca58b08d2fec14))
+* Revert "chore(deps-dev): bump prettier from 2.0.4 to 2.0.5 (#41)" ([c5613ca](https://github.com/K-FOSS/TS-ESNode/commit/c5613caced685571de2c493080659714c00f6201)), closes [#41](https://github.com/K-FOSS/TS-ESNode/issues/41)
+* Revert "chore(deps-dev): bump semantic-release from 17.0.4 to 17.0.7 (#42)" ([1d6a63d](https://github.com/K-FOSS/TS-ESNode/commit/1d6a63d8f11eb9ac5a3cc4d15039d56aa68626c8)), closes [#42](https://github.com/K-FOSS/TS-ESNode/issues/42)
+* Revert "fix(dot import): Fix `import XYZ from '.'` (#52)" ([33612d1](https://github.com/K-FOSS/TS-ESNode/commit/33612d1b53a3fc5f1e7bd76eb8703330c348b3dc)), closes [#52](https://github.com/K-FOSS/TS-ESNode/issues/52)
+* Revert "release 1.3.6 (#31)" ([db72a3f](https://github.com/K-FOSS/TS-ESNode/commit/db72a3f5864513c72b51c0f0507acc21234bacea)), closes [#31](https://github.com/K-FOSS/TS-ESNode/issues/31)
+
 ## [1.3.7](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.6...v1.3.7) (2020-05-12)
 
 
