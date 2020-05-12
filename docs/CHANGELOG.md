@@ -1,3 +1,10 @@
+## [1.3.7](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.6...v1.3.7) (2020-05-12)
+
+
+### Bug Fixes
+
+* **dot import:** Fix `import XYZ from '.'` ([#52](https://github.com/K-FOSS/TS-ESNode/issues/52)) ([19df585](https://github.com/K-FOSS/TS-ESNode/commit/19df585d6d683a499f9df47301abf3d23d267541)), closes [#34](https://github.com/K-FOSS/TS-ESNode/issues/34)
+
 ## [1.3.6](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.5...v1.3.6) (2020-05-12)
 
 
