@@ -1,10 +1,3 @@
-## [1.3.6](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.5...v1.3.6) (2020-05-12)
-
-
-### Bug Fixes
-
-* **dynamicInstantiate:** works with pnpm ([#45](https://github.com/K-FOSS/TS-ESNode/issues/45)) ([5c0fadf](https://github.com/K-FOSS/TS-ESNode/commit/5c0fadf4d0508ee842578ab4a65899fad69d4b72))
-
 ## [1.3.5](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.4...v1.3.5) (2020-04-05)
 
 
