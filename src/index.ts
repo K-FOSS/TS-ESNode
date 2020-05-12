@@ -17,7 +17,7 @@ import { getTSConfig } from './Utils';
 const rootModulePath = `${process.cwd()}/`;
 const baseURL = pathToFileURL(rootModulePath).href;
 
-const relativePathRegex = /^\.{1,2}[/]/;
+const relativePathRegex = /^\.{1,2}[/]?/;
 const hasExtensionRegex = /\.\w+$/;
 
 // TODO: Allow customization of extensions
