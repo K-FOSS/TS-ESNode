@@ -71,9 +71,9 @@ export async function resolve(
 export async function dynamicInstantiate(url: string) {
   const moduleUrl = new URL(url);
 
-  const pathParts = moduleUrl.pathname.split('node_modules/');
-  const specifier = pathParts.pop()!;
-  const nodeModulesBase = pathParts.join('node_modules/');
+  const [nodeModulesBase, specifier] = moduleUrl.pathname.split(
+    'node_modules/',
+  );
 
   const nodeModuleUrl = new URL('node_modules', pathToFileURL(nodeModulesBase));
 
