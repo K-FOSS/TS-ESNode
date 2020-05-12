@@ -9,7 +9,9 @@ export interface Result {
 }
 
 export function runTest(test: Test): Promise<Result> {
-  const worker = spawnWorker(test.path, {});
+  const worker = spawnWorker(test.path, {
+    helloWorld: ['test', 'test2'],
+  });
 
   return new Promise((resolve, reject) => {
     worker.on('exit', (exitCode) => {

@@ -4,16 +4,25 @@ on:
   push:
     branches:
       - master
+      - next
 
 jobs:
   Test:
     name: Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['13.9', '13.10', '13.11']
     steps:
       - uses: actions/checkout@v2
-      - uses: k-foss/npm-run-action@master
+      - uses: actions/setup-node@v1.4.1
         with:
-          scriptName: 'test'
+          node-version: ${{ matrix.node }}
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Tests
+        run: npm run test
 
   Publish:
     name: NPM Publish
