@@ -2,27 +2,26 @@
 import { createRequire } from 'module';
 import { basename, dirname } from 'path';
 import ts from 'typescript';
-import { fileURLToPath, pathToFileURL } from 'url';
+import { fileURLToPath, pathToFileURL, URL, format } from 'url';
 import { findFiles } from './findFiles';
 import {
-  ModuleFormat,
   ResolveContext,
   ResolveResponse,
   Source,
   TransformContext,
   TransformResponse,
+  ModuleFormat,
 } from './types';
 import { getTSConfig } from './Utils';
 
 const rootModulePath = `${process.cwd()}/`;
 const baseURL = pathToFileURL(rootModulePath).href;
 
-const relativePathRegex = /^\.{1,2}[/]?/;
-const hasExtensionRegex = /\.\w+$/;
+const relativePathRegex = /^\.{0,2}[/]/;
 
 // TODO: Allow customization of extensions
 const extensions = ['.ts', '.tsx'];
-const extensionsRegex = new RegExp(`\\${extensions.join('|\\')}`);
+const extensionsRegex = new RegExp(`\\${extensions.join('$|\\')}$`);
 
 // Custom resolver to allow `.ts` and `.tsx` extensions, along with finding files if no extension is provided.
 export async function resolve(
@@ -32,29 +31,26 @@ export async function resolve(
 ): Promise<ResolveResponse> {
   const { parentURL = baseURL } = context;
 
-  const resolvedUrl = new URL(specifier, parentURL);
-  const fileName = basename(resolvedUrl.pathname);
-
   // If we can already see a `.ts` or `.tsx` extensions then we can create a File URL
-  if (extensionsRegex.test(fileName)) {
+  if (extensionsRegex.test(specifier)) {
     // Node.js normally errors on unknown file extensions, so return a URL for
     // specifiers ending in the TypeScript file extensions.
     return {
-      url: resolvedUrl.href,
+      url: new URL(specifier, parentURL).href,
     };
   }
 
   /**
    * If no extension is passed and is a relative import then let's try to find a `.ts` or `.tsx` file at the path
    */
-  if (relativePathRegex.test(specifier) && !hasExtensionRegex.test(fileName)) {
-    const filePath = fileURLToPath(resolvedUrl);
+  if (relativePathRegex.test(specifier) && !specifier.startsWith('file:')) {
+    const fileURL = new URL(specifier, parentURL);
+    const filePath = fileURLToPath(fileURL);
 
     const file = await findFiles(dirname(filePath), {
-      fileName,
+      fileName: basename(filePath),
       extensions,
     });
-
     return {
       url: file.href,
     };
@@ -69,19 +65,13 @@ export async function resolve(
  * @param url fileURL given by Node.JS
  */
 export async function dynamicInstantiate(url: string) {
-  const moduleUrl = new URL(url);
-
-  const pathParts = moduleUrl.pathname.split('node_modules/');
-  const specifier = pathParts.pop()!;
-  const nodeModulesBase = pathParts.join('node_modules/');
-
-  const nodeModuleUrl = new URL('node_modules', pathToFileURL(nodeModulesBase));
-
   // Create a Node.JS Require using the `node_modules` folder as the base URL.
-  const require = createRequire(nodeModuleUrl);
+  const require = createRequire(
+    `${url.split('/node_modules/')[0].replace('file://', '')}/node_modules/`,
+  );
 
   // Import the module file path
-  let dynModule = require(specifier);
+  let dynModule = require(url.replace(/.*\/node_modules\//, ''));
 
   /**
    * This is needed to allow for default exports in CommonJS modules.
@@ -115,11 +105,8 @@ export async function getFormat(
   let format = formatCache.get(url);
   if (format) return { format };
 
-  const resolvedUrl = new URL(url);
-  const fileName = basename(resolvedUrl.pathname);
-
   // If it's a TypeScript extension then force `module` mode.
-  if (extensionsRegex.test(fileName)) format = 'module';
+  if (extensionsRegex.test(url)) format = 'module';
 
   if (!format) {
     const defaultResolve = defaultGetFormat(url, context, defaultGetFormat) as {
@@ -149,11 +136,8 @@ export async function transformSource(
   context: TransformContext,
   defaultTransformSource: Function,
 ): Promise<TransformResponse> {
-  const resolvedUrl = new URL(context.url);
-  const fileName = basename(resolvedUrl.pathname);
-
   // Only transform TypeScript Modules
-  if (extensionsRegex.test(fileName)) {
+  if (extensionsRegex.test(context.url)) {
     const sourceFilePath = fileURLToPath(context.url);
 
     // Load the closest `tsconfig.json` to the source file
@@ -165,6 +149,7 @@ export async function transformSource(
       reportDiagnostics: true,
     });
 
+    // TODO: Actually "check" the TypeScript Code.
     return {
       source: transpiledModule.outputText,
     };
