@@ -69,38 +69,37 @@ export async function resolve(
  * @param url fileURL given by Node.JS
  */
 export async function dynamicInstantiate(url: string) {
-  const moduleUrl = new URL(url);
+  const urlParts = url.split('/node_modules/');
 
-  const pathParts = moduleUrl.pathname.split('node_modules/');
-  const specifier = pathParts.pop()!;
-  const nodeModulesBase = pathParts.join('node_modules/');
+  // Extract the module name after node_modules.
+  const moduleName = urlParts.pop()!;
 
-  const nodeModuleUrl = new URL('node_modules', pathToFileURL(nodeModulesBase));
+  // With NPM, this is just top-level node_modules.
+  // With PNPM, this is the innermost node_modules.
+  const nodeModulesPath = urlParts.join('/node_modules/');
 
-  // Create a Node.JS Require using the `node_modules` folder as the base URL.
-  const require = createRequire(nodeModuleUrl);
+  // Create a require function next to node_module, and import the CommonJS module.
+  const require = createRequire(`${nodeModulesPath}/noop.js`);
+  let dynModule = require(moduleName);
 
-  // Import the module file path
-  let dynModule = require(specifier);
-
-  /**
-   * This is needed to allow for default exports in CommonJS modules.
-   */
-  if (dynModule.default && dynModule !== dynModule.default)
+  // Adapt to default exports in CommonJS module.
+  if (dynModule.default && dynModule !== dynModule.default) {
     dynModule = {
       ...dynModule.default,
       ...dynModule,
     };
+  }
 
+  // Export as ES Module.
   const linkKeys = Object.keys(dynModule);
   const exports = dynModule.default ? linkKeys : [...linkKeys, 'default'];
-
   return {
     exports,
     execute: (module: any) => {
       module.default.set(dynModule);
-      // For all elements in the import set the module's key.
-      for (const linkKey of linkKeys) module[linkKey].set(dynModule[linkKey]);
+      for (const linkKey of linkKeys) {
+        module[linkKey].set(dynModule[linkKey]);
+      }
     },
   };
 }
