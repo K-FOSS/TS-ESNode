@@ -8,7 +8,7 @@ const formatHost: ts.FormatDiagnosticsHost = {
   getNewLine: () => tsSys.newLine,
 };
 
-export function reportDiagnostic(diagnostic: ts.Diagnostic) {
+export function reportDiagnostic(diagnostic: ts.Diagnostic): void {
   console.error(
     'Error',
     diagnostic.code,
@@ -18,15 +18,6 @@ export function reportDiagnostic(diagnostic: ts.Diagnostic) {
       formatHost.getNewLine(),
     ),
   );
-}
-
-// Reports status like Project needs to be built because output file doesnot exist
-export function reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
-  console.info(getTextForDiagnostic(diagnostic));
-}
-
-export function reportWatchStatusChanged(diagnostic: ts.Diagnostic) {
-  console.info(ts.formatDiagnostic(diagnostic, formatHost));
 }
 
 export function getTextForDiagnostic(diagnostic: ts.Diagnostic): string {
@@ -44,4 +35,13 @@ export function getTextForDiagnostic(diagnostic: ts.Diagnostic): string {
   } else {
     return `${ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`;
   }
+}
+
+// Reports status like Project needs to be built because output file doesnot exist
+export function reportSolutionBuilderStatus(diagnostic: ts.Diagnostic): void {
+  console.info(getTextForDiagnostic(diagnostic));
+}
+
+export function reportWatchStatusChanged(diagnostic: ts.Diagnostic): void {
+  console.info(ts.formatDiagnostic(diagnostic, formatHost));
 }

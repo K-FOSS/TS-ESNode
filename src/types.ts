@@ -27,3 +27,13 @@ export interface TransformContext {
 export interface TransformResponse {
   source: Source;
 }
+
+export interface DynamicInstantiateResponse {
+  exports: string[];
+
+  execute: (module: { [key: string]: { set(value: unknown): void } }) => void;
+}
+
+export interface GetFormatResponse {
+  format: ModuleFormat;
+}

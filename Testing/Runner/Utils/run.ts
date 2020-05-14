@@ -6,7 +6,7 @@ export function run(
   options: {
     cwd?: string;
   } = {},
-) {
+): Promise<void> {
   return new Promise((resolve, reject) => {
     const args = command.split(' ');
     const bin = args.shift() as string;
