@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/K-FOSS/TS-ESNode/compare/v1.4.0...v1.4.1) (2020-05-14)
+
+
+### Bug Fixes
+
+* **dynamicInstantiate:** works on Windows ([7a98c38](https://github.com/K-FOSS/TS-ESNode/commit/7a98c388d93a7252bcc43fcb8127a4465f75f48f)), closes [#39](https://github.com/K-FOSS/TS-ESNode/issues/39)
+
 # [1.4.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.3.7...v1.4.0) (2020-05-12)
 
 
