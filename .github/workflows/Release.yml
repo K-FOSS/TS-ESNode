@@ -9,10 +9,11 @@ on:
 jobs:
   Test:
     name: Tests
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['13.9', '13.10', '13.11']
+        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+        node: ['13.9', '13.10', '13.11', '14.x']
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1.4.1
@@ -32,7 +33,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1.4.1
         with:
-          node-version: '13.11'
+          node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm ci
