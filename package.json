@@ -33,7 +33,7 @@
     "pretry": "",
     "try": "node --loader ./out/dist/index.js --experimental-specifier-resolution=node ./test/",
     "prepublishOnly": "npm run build",
-    "prettier": "prettier --config .prettierrc --check 'src/**/*ts' 'bin/**/*.ts'"
+    "prettier": "prettier --config .prettierrc --check \"src/**/*ts\" \"bin/**/*.ts\""
   },
   "author": {
     "email": "me@kristianjones.dev",
