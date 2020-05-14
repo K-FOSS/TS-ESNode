@@ -18,7 +18,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm ci
-      - name: Run Tests
+      - name: Run Prettier
         run: npm run prettier
 
   ESLint:
@@ -36,5 +36,5 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm ci
-      - name: Run Tests
+      - name: Run ESLint
         run: npm run lint
