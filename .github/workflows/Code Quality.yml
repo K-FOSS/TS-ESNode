@@ -37,4 +37,4 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run Tests
-        run: npm run prettier
+        run: npm run lint
