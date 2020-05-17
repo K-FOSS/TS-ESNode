@@ -23,7 +23,7 @@ export function spawnWorker(
       workerData: {
         workerPath: transpileURL.href,
       },
-      execArgv: [...process.execArgv, '--unhandled-rejections=strict'],
+      execArgv: [...process.execArgv],
       ...options,
     },
   );

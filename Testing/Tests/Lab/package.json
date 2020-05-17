@@ -4,7 +4,8 @@
   "main": "./src/index.ts",
   "NODE_OPTIONS": "--harmony-top-level-await",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --trace-warnings --loader ../../../out/dist --experimental-specifier-resolution=node ./"
   },
   "author": "",
   "license": "ISC"

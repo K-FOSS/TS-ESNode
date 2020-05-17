@@ -1,6 +1,6 @@
 // Testing/Runner/Utils/findTests.ts
-import { promises as fs } from 'fs';
-import { resolve as resolvePath } from 'path';
+import { promises as fs, Dirent } from 'fs';
+import { resolve as resolvePath, dirname } from 'path';
 import { run } from './run';
 import { Test } from './Test';
 
@@ -10,36 +10,48 @@ import { Test } from './Test';
 const testsPath = resolvePath(`Testing/Tests`);
 
 export async function findTests(): Promise<Test[]> {
-  const dirContents = await fs.readdir(testsPath, { withFileTypes: true });
   console.debug(`Finding tests.`);
-
-  const tests: Test[] = [];
   const npmInstalls: Promise<unknown>[] = [];
 
-  for (const dirContent of dirContents) {
-    if (!dirContent.isDirectory()) continue;
-
-    const testPath = resolvePath(testsPath, dirContent.name);
-    const testPkgPath = resolvePath(testPath, 'package.json');
-
-    const testPkgFile = await fs.readFile(testPkgPath);
-    const testPkg = JSON.parse(testPkgFile.toString());
-
-    const testMainPath = resolvePath(testPath, testPkg.main);
-
-    tests.push({
-      name: testPkg.name,
-      nodeOptions: testPkg.NODE_OPTIONS,
-      path: testMainPath,
+  async function processDir(dirPath: string): Promise<Test[]> {
+    const directoryContents = await fs.readdir(dirPath, {
+      withFileTypes: true,
+      encoding: 'utf-8',
     });
 
-    npmInstalls.push(
-      run('npm install', {
-        cwd: testPath,
+    const tests = await Promise.all(
+      directoryContents.map(async (dirContent) => {
+        const contentName = dirContent.name;
+        const contentPath = resolvePath(dirPath, contentName);
+
+        if (contentName === 'node_modules') return [];
+
+        if (dirContent.isDirectory()) {
+          return processDir(contentPath);
+        }
+
+        if (contentName === 'package.json') {
+          const { name } = await import(contentPath);
+          npmInstalls.push(
+            run('npm install', {
+              cwd: dirname(contentPath),
+            }),
+          );
+
+          return new Test({
+            name,
+            path: contentPath,
+          });
+        }
+
+        return [];
       }),
     );
+
+    return tests.flat(5);
   }
 
+  const tests = await processDir(testsPath);
   await Promise.all(npmInstalls);
 
   return tests;

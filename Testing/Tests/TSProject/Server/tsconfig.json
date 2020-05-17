@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "allowUnreachableCode": false
+  }
+}

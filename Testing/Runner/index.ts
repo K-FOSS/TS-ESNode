@@ -1,6 +1,8 @@
 // Testing/Runner/index.ts
 import { findTests } from './Utils/findTests';
 import { runTest, Result } from './Utils/runTests';
+import { run } from './Utils/run';
+import { dirname } from 'path';
 
 interface TestResults extends Result {
   name: string;
@@ -10,22 +12,28 @@ async function runTests(): Promise<void> {
   console.debug(`Running Tests`);
 
   const tests = await findTests();
-  const results: TestResults[] = [];
 
-  for (const test of tests) {
-    const testResult = await runTest(test);
-    console.log(`Result of ${test.name}: `, testResult);
+  console.time();
 
-    results.push({
-      name: test.name,
-      ...testResult,
-    });
-  }
+  const results = await Promise.all(
+    tests.map(async (test) => {
+      const exec = await run('npm start', {
+        cwd: dirname(test.path),
+      });
+
+      console.log(exec);
+
+      return {
+        name: test.name,
+      };
+    }),
+  );
+  console.timeEnd();
 
   console.log('Results', results);
 
-  const failedTests = results.some(({ passed }) => !passed);
-  if (failedTests) process.exit(1);
+  // const failedTests = results.some(({ passed }) => !passed);
+  // if (failedTests) process.exit(1);
 }
 
 runTests();
