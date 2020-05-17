@@ -1,7 +1,7 @@
 // src/index.ts
 import { createRequire } from 'module';
 import { basename, dirname } from 'path';
-import ts from 'typescript';
+import ts, { CompilerOptions } from 'typescript';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { findFiles } from './findFiles';
 import {
@@ -14,7 +14,6 @@ import {
   DynamicInstantiateResponse,
   GetFormatResponse,
 } from './types';
-import { getTSConfig } from './Utils';
 
 const rootModulePath = `${process.cwd()}/`;
 const baseURL = pathToFileURL(rootModulePath).href;
@@ -159,13 +158,37 @@ export async function transformSource(
   if (extensionsRegex.test(fileName)) {
     const sourceFilePath = fileURLToPath(context.url);
 
-    // Load the closest `tsconfig.json` to the source file
-    const tsConfig = getTSConfig(dirname(sourceFilePath));
+    let compilerOptions: CompilerOptions = {};
+
+    const tsConfigPath = ts.findConfigFile(
+      process.env.TS_PROJECT || dirname(sourceFilePath),
+      ts.sys.fileExists,
+      'tsconfig.json',
+    );
+    if (tsConfigPath) {
+      const tsConfigFile = ts.readConfigFile(tsConfigPath, ts.sys.readFile)
+        .config;
+
+      compilerOptions = ts.convertCompilerOptionsFromJson(
+        tsConfigFile.compilerOptions,
+        dirname(tsConfigPath),
+      ).options;
+    } else {
+      compilerOptions = {
+        module: ts.ModuleKind.ESNext,
+        target: ts.ScriptTarget.ESNext,
+        moduleResolution: ts.ModuleResolutionKind.NodeJs,
+        allowJs: true,
+        skipLibCheck: true,
+      };
+    }
 
     // Transpile the source code that Node passed to us.
     const transpiledModule = ts.transpileModule(source.toString(), {
-      compilerOptions: tsConfig,
+      compilerOptions,
       reportDiagnostics: true,
+      fileName: resolvedUrl.pathname,
+      moduleName: fileName,
     });
 
     return {
