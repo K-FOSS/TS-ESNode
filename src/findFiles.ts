@@ -26,7 +26,7 @@ async function findFile(
         return true;
       }
 
-      for (let extension of [...extensions, ...JS_EXTS]) {
+      for (const extension of [...extensions, ...JS_EXTS]) {
         if (directoryFileName === fileName + extension) {
           return true;
         }

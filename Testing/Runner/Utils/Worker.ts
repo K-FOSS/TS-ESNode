@@ -3,6 +3,7 @@ import { Worker, WorkerOptions } from 'worker_threads';
 import { resolvePath } from './resolvePath';
 import { pathToFileURL } from 'url';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SubWorkerData = { [key: string]: any };
 
 export function spawnWorker(
@@ -33,7 +34,9 @@ export function spawnWorker(
 export function getWorkerData(importUrlString: string): SubWorkerData {
   const importUrl = new URL(importUrlString);
 
+  // eslint-disable-next-line prefer-const
   let workerData: SubWorkerData = {};
+
   for (const [searchKey, searchData] of importUrl.searchParams.entries()) {
     workerData[searchKey] = searchData;
   }

@@ -13,8 +13,8 @@ export function runTest(test: Test): Promise<Result> {
     helloWorld: ['test', 'test2'],
   });
 
-  return new Promise((resolve, reject) => {
-    worker.on('exit', (exitCode) => {
+  return new Promise((resolve) => {
+    worker.on('exit', () => {
       resolve({
         passed: true,
       });

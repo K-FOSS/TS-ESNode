@@ -11,6 +11,8 @@ import {
   Source,
   TransformContext,
   TransformResponse,
+  DynamicInstantiateResponse,
+  GetFormatResponse,
 } from './types';
 import { getTSConfig } from './Utils';
 
@@ -68,7 +70,9 @@ export async function resolve(
  * This dynamically imports the `node_modules` module and creates a dynamic module with all the same exports.
  * @param url fileURL given by Node.JS
  */
-export async function dynamicInstantiate(url: string) {
+export async function dynamicInstantiate(
+  url: string,
+): Promise<DynamicInstantiateResponse> {
   const urlParts = url.split('/node_modules/');
 
   // Extract the module name after node_modules.
@@ -95,7 +99,7 @@ export async function dynamicInstantiate(url: string) {
   const exports = dynModule.default ? linkKeys : [...linkKeys, 'default'];
   return {
     exports,
-    execute: (module: any) => {
+    execute: (module): void => {
       module.default.set(dynModule);
       for (const linkKey of linkKeys) {
         module[linkKey].set(dynModule[linkKey]);
@@ -110,7 +114,7 @@ export async function getFormat(
   url: string,
   context: never,
   defaultGetFormat: Function,
-) {
+): Promise<GetFormatResponse> {
   let format = formatCache.get(url);
   if (format) return { format };
 
