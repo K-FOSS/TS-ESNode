@@ -1,7 +1,7 @@
 // src/index.ts
 import { createRequire } from 'module';
-import { basename, dirname } from 'path';
-import ts from 'typescript';
+import { basename, dirname, resolve as resolvePath, relative } from 'path';
+import ts, { CompilerOptions } from 'typescript';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { findFiles } from './findFiles';
 import {
@@ -26,6 +26,8 @@ const hasExtensionRegex = /\.\w+$/;
 const extensions = ['.ts', '.tsx'];
 const extensionsRegex = new RegExp(`\\${extensions.join('|\\')}`);
 
+let TSConfig: CompilerOptions;
+
 // Custom resolver to allow `.ts` and `.tsx` extensions, along with finding files if no extension is provided.
 export async function resolve(
   specifier: string,
@@ -33,6 +35,26 @@ export async function resolve(
   defaultResolve: Function,
 ): Promise<ResolveResponse> {
   const { parentURL = baseURL } = context;
+
+  let forceRelative = false;
+  if (TSConfig?.paths) {
+    for (const tsPath of Object.keys(TSConfig.paths)) {
+      const tsPathKey = tsPath.replace('/*', '');
+      if (specifier.startsWith(tsPathKey)) {
+        const pathSpecifier = TSConfig.paths[tsPath][0].replace(
+          '/*',
+          specifier.split(tsPathKey)[1],
+        );
+
+        forceRelative = true;
+        specifier = resolvePath(
+          rootModulePath,
+          TSConfig.baseUrl!,
+          pathSpecifier,
+        );
+      }
+    }
+  }
 
   const resolvedUrl = new URL(specifier, parentURL);
   const fileName = basename(resolvedUrl.pathname);
@@ -49,7 +71,10 @@ export async function resolve(
   /**
    * If no extension is passed and is a relative import then let's try to find a `.ts` or `.tsx` file at the path
    */
-  if (relativePathRegex.test(specifier) && !hasExtensionRegex.test(fileName)) {
+  if (
+    (relativePathRegex.test(specifier) || forceRelative) &&
+    !hasExtensionRegex.test(fileName)
+  ) {
     const filePath = fileURLToPath(resolvedUrl);
 
     const file = await findFiles(dirname(filePath), {
@@ -161,6 +186,7 @@ export async function transformSource(
 
     // Load the closest `tsconfig.json` to the source file
     const tsConfig = getTSConfig(dirname(sourceFilePath));
+    TSConfig = tsConfig;
 
     // Transpile the source code that Node passed to us.
     const transpiledModule = ts.transpileModule(source.toString(), {

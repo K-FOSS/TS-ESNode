@@ -5,7 +5,6 @@ import { isAbsolute as isAbsolutePath, dirname as pathDirname } from 'path';
 let tsConfigCache: CompilerOptions;
 
 export function getTSConfig(modulePath: string): CompilerOptions {
-  if (tsConfigCache) return tsConfigCache;
   const tsConfigPath = ts.findConfigFile(modulePath, ts.sys.fileExists);
 
   if (!tsConfigPath || !isAbsolutePath(tsConfigPath)) {

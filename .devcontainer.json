@@ -10,7 +10,11 @@
     "SHELL": "/bin/sh"
   },
 
-  "extensions": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
+  "extensions": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens"
+  ],
 
   "remoteUser": "node",
 

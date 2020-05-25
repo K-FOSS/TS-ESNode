@@ -3,13 +3,11 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
-
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
+    "baseUrl": "./src",
 
-    "strict": true,
-    "outDir": "out/dist",
-    "rootDir": "src"
-  },
-  "include": ["src/**/*.ts"]
+    "paths": {
+      "@paths/*": ["./*"]
+    }
+  }
 }
