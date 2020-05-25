@@ -37,7 +37,7 @@ export async function resolve(
   const { parentURL = baseURL } = context;
 
   let forceRelative = false;
-  if (TSConfig?.paths) {
+  if (TSConfig && TSConfig.paths) {
     for (const tsPath of Object.keys(TSConfig.paths)) {
       const tsPathKey = tsPath.replace('/*', '');
       if (specifier.startsWith(tsPathKey)) {
