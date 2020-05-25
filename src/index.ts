@@ -51,7 +51,6 @@ export async function resolve(
         parentURL = `${
           pathToFileURL(resolvePath(baseURL, TSConfig.baseUrl!)).href
         }/`;
-        console.log(parentURL, pathSpecifier);
 
         specifier = pathSpecifier;
       }
