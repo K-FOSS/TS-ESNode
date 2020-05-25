@@ -149,7 +149,7 @@ export async function getFormat(
 
 export async function transformSource(
   source: Source,
-  context: string,
+  context: TransformContext,
   defaultTransformSource: Function,
 ): Promise<TransformResponse> {
   const resolvedUrl = new URL(context.url);
