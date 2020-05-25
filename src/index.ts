@@ -16,7 +16,7 @@ import {
 } from './types';
 import { getTSConfig } from './Utils';
 
-const rootModulePath = `${process.cwd()}/`;
+const rootModulePath = process.cwd();
 const baseURL = pathToFileURL(rootModulePath).href;
 
 const relativePathRegex = /^\.{1,2}[/]?/;
@@ -47,11 +47,7 @@ export async function resolve(
         );
 
         forceRelative = true;
-        specifier = resolvePath(
-          rootModulePath,
-          TSConfig.baseUrl!,
-          pathSpecifier,
-        );
+        specifier = resolvePath(baseURL, TSConfig.baseUrl!, pathSpecifier);
       }
     }
   }
