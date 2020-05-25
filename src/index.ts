@@ -34,7 +34,7 @@ export async function resolve(
   context: ResolveContext,
   defaultResolve: Function,
 ): Promise<ResolveResponse> {
-  const { parentURL = baseURL } = context;
+  let { parentURL = baseURL } = context;
 
   let forceRelative = false;
   if (TSConfig && TSConfig.paths) {
@@ -47,7 +47,13 @@ export async function resolve(
         );
 
         forceRelative = true;
-        specifier = resolvePath(baseURL, TSConfig.baseUrl!, pathSpecifier);
+
+        parentURL = `${
+          pathToFileURL(resolvePath(baseURL, TSConfig.baseUrl!)).href
+        }/`;
+        console.log(parentURL, pathSpecifier);
+
+        specifier = pathSpecifier;
       }
     }
   }
