@@ -1,18 +1,18 @@
 // src/index.ts
 import { createRequire } from 'module';
-import { basename, dirname, resolve as resolvePath, relative } from 'path';
+import { basename, dirname, resolve as resolvePath } from 'path';
 import ts, { CompilerOptions } from 'typescript';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { findFiles } from './findFiles';
 import {
+  DynamicInstantiateResponse,
+  GetFormatResponse,
   ModuleFormat,
   ResolveContext,
   ResolveResponse,
   Source,
   TransformContext,
   TransformResponse,
-  DynamicInstantiateResponse,
-  GetFormatResponse,
 } from './types';
 import { getTSConfig } from './Utils';
 
