@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
+
+    "allowJs": true,
+    "paths": {
+      "@paths/*": ["./*"],
+      "random": ["./Utils/random"]
+    }
+  }
+}
