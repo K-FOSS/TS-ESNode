@@ -1,6 +1,6 @@
 // src/index.ts
 import { createRequire } from 'module';
-import { basename, dirname, resolve as resolvePath } from 'path';
+import { basename, dirname, resolve as resolvePath, relative } from 'path';
 import ts, { CompilerOptions } from 'typescript';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { findFiles } from './findFiles';
@@ -34,25 +34,24 @@ export async function resolve(
   context: ResolveContext,
   defaultResolve: Function,
 ): Promise<ResolveResponse> {
-  let { parentURL = baseURL } = context;
+  const { parentURL = baseURL } = context;
 
-  let forceRelative = false;
+  // let forceRelative = false;
   if (TSConfig?.paths) {
     for (const tsPath of Object.keys(TSConfig.paths)) {
-      const tsPathKey = tsPath.replace('/*', '');
+      const tsPathKey = tsPath.replace('*', '');
       if (specifier.startsWith(tsPathKey)) {
-        const pathSpecifier = TSConfig.paths[tsPath][0].replace(
-          '/*',
-          specifier.split(tsPathKey)[1],
+        const randomPath = resolvePath(
+          resolvePath(baseURL, TSConfig.baseUrl!),
+          TSConfig.paths[tsPath][0].replace('*', specifier.split(tsPathKey)[1]),
         );
 
-        forceRelative = true;
+        specifier = `./${relative(
+          dirname(fileURLToPath(parentURL)),
+          randomPath,
+        )}`;
 
-        parentURL = `${
-          pathToFileURL(resolvePath(baseURL, TSConfig.baseUrl!)).href
-        }/`;
-
-        specifier = pathSpecifier;
+        break;
       }
     }
   }
@@ -72,10 +71,7 @@ export async function resolve(
   /**
    * If no extension is passed and is a relative import then let's try to find a `.ts` or `.tsx` file at the path
    */
-  if (
-    (relativePathRegex.test(specifier) || forceRelative) &&
-    !hasExtensionRegex.test(fileName)
-  ) {
+  if (relativePathRegex.test(specifier) && !hasExtensionRegex.test(fileName)) {
     const filePath = fileURLToPath(resolvedUrl);
 
     const file = await findFiles(dirname(filePath), {
@@ -89,7 +85,7 @@ export async function resolve(
   }
 
   // Let Node.js handle all other specifiers.
-  return defaultResolve(specifier, context, defaultResolve);
+  return defaultResolve(specifier, { ...context, parentURL }, defaultResolve);
 }
 
 /**
