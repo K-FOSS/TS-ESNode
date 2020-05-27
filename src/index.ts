@@ -182,13 +182,15 @@ export async function transformSource(
     const sourceFilePath = fileURLToPath(context.url);
 
     // Load the closest `tsconfig.json` to the source file
-    const tsConfig = getTSConfig(dirname(sourceFilePath));
+    const tsConfig = await getTSConfig(dirname(sourceFilePath));
     TSConfig = tsConfig;
 
     // Transpile the source code that Node passed to us.
     const transpiledModule = ts.transpileModule(source.toString(), {
-      compilerOptions: tsConfig,
+      compilerOptions: TSConfig,
       reportDiagnostics: true,
+      fileName: resolvedUrl.pathname,
+      moduleName: fileName,
     });
 
     return {

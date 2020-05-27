@@ -1,11 +1,16 @@
 // src/Utils.ts
+import { promises as fs } from 'fs';
+import { dirname, isAbsolute as isAbsolutePath } from 'path';
 import ts, { CompilerOptions } from 'typescript';
-import { isAbsolute as isAbsolutePath, dirname as pathDirname } from 'path';
 
 let tsConfigCache: CompilerOptions;
 
-export function getTSConfig(modulePath: string): CompilerOptions {
-  const tsConfigPath = ts.findConfigFile(modulePath, ts.sys.fileExists);
+export async function getTSConfig(
+  modulePath: string,
+): Promise<CompilerOptions> {
+  const tsConfigPath =
+    process.env.TS_CONFIG_PATH ??
+    ts.findConfigFile(modulePath, ts.sys.fileExists);
 
   if (!tsConfigPath || !isAbsolutePath(tsConfigPath)) {
     // If no `tsconfig.json` then we force the module to be transpiled as `ESNext`
@@ -17,12 +22,13 @@ export function getTSConfig(modulePath: string): CompilerOptions {
       skipLibCheck: true,
     };
   } else {
-    const tsConfigFile = ts.readConfigFile(tsConfigPath, ts.sys.readFile)
-      .config;
+    const jsonText = await fs.readFile(tsConfigPath);
+    const result = ts.parseJsonText(tsConfigPath, jsonText.toString());
 
-    tsConfigCache = ts.convertCompilerOptionsFromJson(
-      tsConfigFile.compilerOptions,
-      pathDirname(tsConfigPath),
+    tsConfigCache = ts.parseJsonSourceFileConfigFileContent(
+      result,
+      ts.sys,
+      dirname(tsConfigPath),
     ).options;
   }
 
