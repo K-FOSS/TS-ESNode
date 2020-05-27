@@ -41,14 +41,14 @@ export async function resolve(
     for (const tsPath of Object.keys(TSConfig.paths)) {
       const tsPathKey = tsPath.replace('*', '');
       if (specifier.startsWith(tsPathKey)) {
-        const randomPath = resolvePath(
+        const tsResolvedPath = resolvePath(
           resolvePath(baseURL, TSConfig.baseUrl!),
           TSConfig.paths[tsPath][0].replace('*', specifier.split(tsPathKey)[1]),
         );
 
         specifier = `./${relative(
           dirname(fileURLToPath(parentURL)),
-          randomPath,
+          tsResolvedPath,
         )}`;
 
         break;
