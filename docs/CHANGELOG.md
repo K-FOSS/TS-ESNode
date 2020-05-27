@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/K-FOSS/TS-ESNode/compare/v1.5.0...v1.5.1) (2020-05-27)
+
+
+### Bug Fixes
+
+* **paths:** Refactor Paths handling ([#80](https://github.com/K-FOSS/TS-ESNode/issues/80)) ([e537269](https://github.com/K-FOSS/TS-ESNode/commit/e537269dbc81786ae710799ad07001710ceafe50))
+
 # [1.5.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.4.1...v1.5.0) (2020-05-26)
 
 
