@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+
+    "jsx": "react",
+    "baseUrl": "./src",
+    "paths": {
+      "app/*": ["./*"]
+    }
+  }
+}

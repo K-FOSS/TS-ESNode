@@ -12,8 +12,9 @@ async function startApp(): Promise<void> {
   strictEqual(appHTML1, '<div>HelloAppWorld</div>');
 
   process.env.TS_CONFIG_PATH = resolve(
-    'Testing/Tests/TSConfig/tsconfig.random.json',
+    'Testing/Tests/TSConfigExtends/tsconfig.random.json',
   );
+  console.log(process.env.TS_CONFIG_PATH);
 
   const { Main } = await import('./Main');
   const mainHTML1 = await renderModule(Main);
