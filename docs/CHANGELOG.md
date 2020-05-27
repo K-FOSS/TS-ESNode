@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.5.1...v1.6.0) (2020-05-27)
+
+
+### Features
+
+* **TS_CONFIG_PATH:** `TS_CONFIG_PATH` environment variable for forcing tsconfig loading ([#64](https://github.com/K-FOSS/TS-ESNode/issues/64)) ([5885d2e](https://github.com/K-FOSS/TS-ESNode/commit/5885d2e1d92d969fbb9506e21efa647c9dc915d0))
+
 ## [1.5.1](https://github.com/K-FOSS/TS-ESNode/compare/v1.5.0...v1.5.1) (2020-05-27)
 
 
