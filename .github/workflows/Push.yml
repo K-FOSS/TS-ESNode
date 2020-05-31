@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Git
+        run: git config core.symlinks ​false​
+
       - name: Link @K-FOSS/TS-ESNode
         run: ln -s $PWD ./node_modules/@k-foss/ts-esnode
 
