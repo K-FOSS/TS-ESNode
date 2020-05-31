@@ -3,7 +3,7 @@ import { TestSuite } from '@k-foss/ts-estests';
 import { strictEqual } from 'assert';
 
 export class JSNonExtPathsHelloWorldSuite extends TestSuite {
-  public testName = 'JSNonExtPaths - HelloWorld Tests';
+  public testName = 'JSNonExtPaths - HelloWorld/index.ts';
 
   public async test(): Promise<void> {
     const { testingSubPath } = await import('.');

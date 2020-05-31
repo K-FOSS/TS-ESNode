@@ -3,7 +3,7 @@ import { TestSuite } from '@k-foss/ts-estests';
 import { strictEqual } from 'assert';
 
 export class FolderImportSuite extends TestSuite {
-  public testName = 'FolderImport Tests';
+  public testName = 'FolderImport Suite';
 
   public async test(): Promise<void> {
     const [{ helloMessage }, { sayHello }] = await Promise.all([

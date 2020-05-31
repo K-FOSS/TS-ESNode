@@ -3,7 +3,7 @@ import { TestSuite } from '@k-foss/ts-estests';
 import { strictEqual } from 'assert';
 
 export class JSNonExtPathsMathSuite extends TestSuite {
-  public testName = 'JSNonExtPaths - Math.ts Tests';
+  public testName = 'JSNonExtPaths - Math.ts Suite';
 
   public async test(): Promise<void> {
     const { add, divide } = await import('./Math');

@@ -3,8 +3,8 @@ import { TestSuite } from '@k-foss/ts-estests';
 import { notDeepStrictEqual, deepStrictEqual } from 'assert';
 import { getAxios, getAxiosDynamic } from './index';
 
-export class AxiosTest extends TestSuite {
-  public testName = 'Axios Test';
+export class AxiosSuite extends TestSuite {
+  public testName = 'Axios Suite';
 
   public async test(): Promise<void> {
     const axios = await getAxios();

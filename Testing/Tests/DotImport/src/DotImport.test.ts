@@ -3,7 +3,7 @@ import { TestSuite } from '@k-foss/ts-estests';
 import { strictEqual } from 'assert';
 
 export class DotImportSuite extends TestSuite {
-  public testName = 'DotImport Tests';
+  public testName = 'DotImport Suite';
 
   public async test(): Promise<void> {
     const { helloString } = await import('.');

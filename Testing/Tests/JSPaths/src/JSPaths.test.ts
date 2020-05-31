@@ -1,10 +1,10 @@
-// Testing/Tests/JSNonExtPaths/src/JSNonExtPaths.test.ts
+// Testing/Tests/JSPaths/src/JSPaths.test.ts
 import { TestSuite } from '@k-foss/ts-estests';
 import { strictEqual } from 'assert';
 import { add, divide } from '@paths/Utils/Math';
 
-export class JSNonExtPathsSuite extends TestSuite {
-  public testName = 'JSNonExtPaths Suite';
+export class JSPathsSuite extends TestSuite {
+  public testName = 'JSPaths Suite';
 
   public async test(): Promise<void> {
     strictEqual(add(1, 1), 2, 'add(1, 1) === 2');
