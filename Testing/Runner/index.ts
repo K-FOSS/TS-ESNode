@@ -1,31 +1,17 @@
 // Testing/Runner/index.ts
-import { findTests } from './Utils/findTests';
-import { runTest, Result } from './Utils/runTests';
+import { WorkerController } from '@k-foss/ts-estests/dist/Modules/Worker/WorkerController';
+import { resolve } from 'path';
+import { installTestsDependencies } from './Utils/installTestsDependencies';
+import { run } from './Utils/run';
 
-interface TestResults extends Result {
-  name: string;
-}
+const testRoot = resolve('Testing/Tests');
 
 async function runTests(): Promise<void> {
-  console.debug(`Running Tests`);
+  await installTestsDependencies();
 
-  const tests = await findTests();
-  const results: TestResults[] = [];
-
-  for (const test of tests) {
-    const testResult = await runTest(test);
-    console.log(`Result of ${test.name}: `, testResult);
-
-    results.push({
-      name: test.name,
-      ...testResult,
-    });
-  }
-
-  console.log('Results', results);
-
-  const failedTests = results.some(({ passed }) => !passed);
-  if (failedTests) process.exit(1);
+  run('npx ts-estest ./Testing/Tests', {
+    cwd: process.cwd(),
+  });
 }
 
 runTests();

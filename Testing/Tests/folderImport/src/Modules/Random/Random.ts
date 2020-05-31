@@ -1,8 +1,8 @@
 // folderImport/src/Modules/Random/Random.ts
+import { helloMessage } from 'folderImport/Modules/Hello';
+
 export function sayHello(): string {
-  const message = 'Hello, World!';
+  console.log(`sayHello(): ${helloMessage}`);
 
-  console.log(`sayHello(): ${message}`);
-
-  return message;
+  return helloMessage;
 }

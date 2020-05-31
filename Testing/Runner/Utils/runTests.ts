@@ -1,6 +1,6 @@
 // Testing/Runner/Utils/runTests.ts
 import { Test } from './Test';
-import { spawnWorker } from './Worker';
+import { spawnWorker } from '@k-foss/ts-worker';
 
 export interface Result {
   passed: boolean;
@@ -9,9 +9,7 @@ export interface Result {
 }
 
 export function runTest(test: Test): Promise<Result> {
-  const worker = spawnWorker(test.path, {
-    helloWorld: ['test', 'test2'],
-  });
+  const worker = spawnWorker(test.path, {});
 
   return new Promise((resolve) => {
     worker.on('exit', () => {

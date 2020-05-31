@@ -1,7 +1,12 @@
 // Axios/src/index.ts
-import axios from 'axios';
-import { notDeepStrictEqual } from 'assert';
+import axios, { AxiosStatic } from 'axios';
 
-notDeepStrictEqual(axios, {});
+export async function getAxios(): Promise<AxiosStatic> {
+  return axios;
+}
 
-console.log(axios);
+export async function getAxiosDynamic(): Promise<AxiosStatic> {
+  const { default: axiosDynamic } = await import('axios');
+
+  return axiosDynamic;
+}
