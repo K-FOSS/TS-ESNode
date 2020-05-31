@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+
+    "baseUrl": "./src",
+    "paths": {
+      "@test/fastify/*": ["./*"]
+    }
+  }
+}
