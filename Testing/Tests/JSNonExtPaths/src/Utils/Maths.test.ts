@@ -11,7 +11,7 @@ export class JSNonExtPathsMathSuite extends TestSuite {
     strictEqual(add(1, 1), 2, 'add(1, 1) === 2');
     strictEqual(add(1, 2), 3, 'add(1, 2) === 3');
 
-    strictEqual(divide(1, 1), 0, 'divide(1, 1) === 1');
+    strictEqual(divide(1, 1), 1, 'divide(1, 1) === 1');
     strictEqual(divide(2, 2), 1, 'divide(2, 2) === 1');
   }
 }
