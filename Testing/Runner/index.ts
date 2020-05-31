@@ -10,9 +10,13 @@ async function runTests(): Promise<void> {
     await fs.symlink(process.cwd(), 'node_modules/@k-foss/ts-esnode', 'dir');
   } catch {}
 
-  await run('npx ts-estest ./Testing/Tests', {
-    cwd: process.cwd(),
-  });
+  try {
+    await run('npx ts-estest ./Testing/Tests', {
+      cwd: process.cwd(),
+    });
+  } catch {
+    process.exit(1);
+  }
 }
 
 runTests();
