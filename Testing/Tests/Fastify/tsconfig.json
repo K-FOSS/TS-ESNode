@@ -4,13 +4,10 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./src",
-    "outDir": "dist",
 
-    "allowJs": true,
+    "baseUrl": "./src",
     "paths": {
-      "@paths/*": ["./*"],
-      "random": ["./Utils/random.js"]
+      "@test/fastify/*": ["./*"]
     }
   }
 }

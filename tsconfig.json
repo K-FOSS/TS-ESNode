@@ -9,7 +9,12 @@
 
     "strict": true,
     "outDir": "out/dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "baseUrl": ".",
+
+    "paths": {
+      "@k-foss/ts-esnode": ["./out/dist/index.js"]
+    }
   },
   "include": ["src/**/*.ts"]
 }
