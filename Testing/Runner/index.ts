@@ -1,13 +1,12 @@
 // Testing/Runner/index.ts
-import { WorkerController } from '@k-foss/ts-estests/dist/Modules/Worker/WorkerController';
-import { resolve } from 'path';
 import { installTestsDependencies } from './Utils/installTestsDependencies';
 import { run } from './Utils/run';
-
-const testRoot = resolve('Testing/Tests');
+import { promises as fs } from 'fs';
 
 async function runTests(): Promise<void> {
   await installTestsDependencies();
+
+  await fs.symlink('./', 'node_modules/@k-foss/ts-esnode');
 
   run('npx ts-estest ./Testing/Tests', {
     cwd: process.cwd(),

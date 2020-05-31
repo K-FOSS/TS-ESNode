@@ -27,11 +27,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
-
-      - name: install global
-        run: npm install -g ./
-
       - name: Run Tests
         run: npm run test
