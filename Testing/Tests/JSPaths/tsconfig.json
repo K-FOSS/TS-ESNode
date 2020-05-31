@@ -5,6 +5,7 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
+    "outDir": "dist",
 
     "allowJs": true,
     "paths": {
