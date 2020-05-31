@@ -6,7 +6,7 @@ import { promises as fs } from 'fs';
 async function runTests(): Promise<void> {
   await installTestsDependencies();
 
-  await fs.symlink('./', 'node_modules/@k-foss/ts-esnode');
+  await fs.symlink(process.cwd(), 'node_modules/@k-foss/ts-esnode', 'dir');
 
   run('npx ts-estest ./Testing/Tests', {
     cwd: process.cwd(),
