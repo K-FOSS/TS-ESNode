@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fastify": "^2.14.1"
+    "fastify": "^2.15.1"
   }
 }
