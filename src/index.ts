@@ -198,14 +198,16 @@ export async function getSource(
 
     // Create a require function next to node_module, and import the CommonJS module.
     const require = createRequire(`${nodeModulesPath}/noop.js`);
-    let dynModule = require(moduleName);
+    const dynModule = require(moduleName);
+    let isDefault = false;
 
-    // Adapt to default exports in CommonJS module.
-    if ((dynModule.default && dynModule) !== dynModule.default) {
-      dynModule = {
-        ...dynModule.default,
-        ...dynModule,
-      };
+    let defaultKeys: string[] = [];
+
+    if (dynModule.default) {
+      if (dynModule.default !== dynModule) {
+        isDefault = true;
+        defaultKeys = Object.keys(dynModule.default);
+      }
     }
 
     // Export as ES Module.
@@ -221,11 +223,22 @@ ${linkKeys
   .map((prop: any) => `let $${prop} = cjs[${JSON.stringify(prop)}];`)
   .join(';\n')}
 
+${defaultKeys
+  .map(
+    (prop: any) =>
+      `let $default${prop} = cjs.default[${JSON.stringify(prop)}];`,
+  )
+  .join(';\n')}
+
 export {
 ${linkKeys.map((prop: string) => ` $${prop} as ${prop},`).join('\n')}
 }
 
-export default cjs;
+export {
+${defaultKeys.map((prop: string) => ` $default${prop} as ${prop},`).join('\n')}
+}
+
+${isDefault ? `export default cjs['default'];` : 'export default cjs;'}
 `;
 
     return {

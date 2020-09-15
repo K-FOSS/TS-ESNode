@@ -11,6 +11,8 @@ This is a Node.JS Loader hook for Node.JS 13.9 or newer that transpiles TypeScri
 
 For Node.JS `<= 14.4` use `npm install @k-foss/ts-esnode@1.6.0`
 
+For Node.jS `=> 14.5` use `npm install @k-foss/ts-esnode@latest`
+
 ## Usage
 
 You should already have `"type": "module"` in your `package.json`
@@ -58,8 +60,6 @@ Follow these steps to open this project in a container:
      - Press F1 and select the "Remote-Containers: Open Folder in Container..." command.
 
 #### TODO
-
-- I would really like to remove the hack to support destructed imports of legacy node_modules, see [this comment](https://github.com/K-FOSS/TS-ESNode/issues/1#issuecomment-596750379) for more information.
 
 - Worker Threads to avoid the TypeScript compiling affecting main thread.
 
