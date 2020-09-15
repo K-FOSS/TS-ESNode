@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.6.0...v1.7.0) (2020-09-15)
+
+
+### Features
+
+* Release ([56690ef](https://github.com/K-FOSS/TS-ESNode/commit/56690ef6b5a7899dc440ccdec27572cb014d82ef))
+
 # [1.6.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.5.1...v1.6.0) (2020-05-27)
 
 
