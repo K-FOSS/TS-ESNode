@@ -7,6 +7,9 @@ import { findFiles } from './findFiles';
 import {
   DynamicInstantiateResponse,
   GetFormatResponse,
+  GetSourceContext,
+  GetSourceHook,
+  GetSourceResponse,
   ModuleFormat,
   ResolveContext,
   ResolveResponse,
@@ -84,7 +87,6 @@ export async function resolve(
     };
   }
 
-  // Let Node.js handle all other specifiers.
   return defaultResolve(specifier, { ...context, parentURL }, defaultResolve);
 }
 
@@ -132,6 +134,8 @@ export async function dynamicInstantiate(
 
 const formatCache = new Map<string, ModuleFormat>();
 
+const CommonJSMap = new Set<string>();
+
 export async function getFormat(
   url: string,
   context: never,
@@ -156,17 +160,80 @@ export async function getFormat(
      * We need to use our dynamic hook on Node.JS CommonJS `node_modules` due to
      * anything exported by TypeScript not being accepted by the exports check in Node
      */
-    if (url.includes('node_modules') && format === 'commonjs') {
-      format = 'dynamic';
-    }
+    // if (url.includes('node_modules') && format === 'commonjs') {
+    //   format = 'dynamic';
+    // }
   }
 
   formatCache.set(url, format);
+
+  if (format === 'commonjs') {
+    format = 'module';
+
+    CommonJSMap.add(url);
+  }
 
   // Let Node.js handle all other URLs.
   return {
     format,
   };
+}
+
+export async function getSource(
+  url: string,
+  context: GetSourceContext,
+  defaultGetSource: GetSourceHook,
+): Promise<GetSourceResponse> {
+  const { format } = context;
+
+  if (CommonJSMap.has(url)) {
+    const urlParts = url.split('/node_modules/');
+
+    // Extract the module name after node_modules.
+    const moduleName = urlParts.pop()!;
+
+    // With NPM, this is just top-level node_modules.
+    // With PNPM, this is the innermost node_modules.
+    const nodeModulesPath = urlParts.join('/node_modules/');
+
+    // Create a require function next to node_module, and import the CommonJS module.
+    const require = createRequire(`${nodeModulesPath}/noop.js`);
+    let dynModule = require(moduleName);
+
+    // Adapt to default exports in CommonJS module.
+    if ((dynModule.default && dynModule) !== dynModule.default) {
+      dynModule = {
+        ...dynModule.default,
+        ...dynModule,
+      };
+    }
+
+    // Export as ES Module.
+    const linkKeys = Object.keys(dynModule).filter((key) => key !== 'default');
+
+    const code = `
+import {createRequire} from 'module';
+
+const require = createRequire('${nodeModulesPath}/noop.js');
+const cjs = require('${moduleName}');
+
+${linkKeys
+  .map((prop: any) => `let $${prop} = cjs[${JSON.stringify(prop)}];`)
+  .join(';\n')}
+
+export {
+${linkKeys.map((prop: string) => ` $${prop} as ${prop},`).join('\n')}
+}
+
+export default cjs;
+`;
+
+    return {
+      source: code,
+    };
+  }
+
+  return defaultGetSource(url, context, defaultGetSource);
 }
 
 export async function transformSource(

@@ -9,6 +9,8 @@ export class FastifyHealthCheckRouteTest extends TestSuite {
   public async test(): Promise<void> {
     const fastify = await createFastifyTestServer();
 
+    console.log('Fastify: ', fastify);
+
     const response = await fastify.inject({
       method: 'GET',
       url: '/healthcheck',

@@ -9,6 +9,8 @@ export class AxiosSuite extends TestSuite {
   public async test(): Promise<void> {
     const axios = await getAxios();
 
+    console.log(axios);
+
     notDeepStrictEqual(axios, {}, 'axios !== {}');
 
     const dynamicAxios = await getAxiosDynamic();
