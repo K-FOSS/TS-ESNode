@@ -9,9 +9,7 @@
 
 This is a Node.JS Loader hook for Node.JS 13.9 or newer that transpiles TypeScript files into JavaScript using the `getFormat`, `resolve`, and `transformSource` hooks.
 
-For Node.JS `<= 14.4` use `npm install @k-foss/ts-esnode@1.6.0`
-
-For Node.jS `=> 14.5` use `npm install @k-foss/ts-esnode@latest`
+For Node.JS use `npm install @k-foss/ts-esnode@latest`
 
 ## Usage
 
