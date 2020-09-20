@@ -42,12 +42,12 @@ export interface GetSourceContext {
   format: string;
 }
 
+export interface GetSourceResponse {
+  source: string | SharedArrayBuffer | Uint8Array;
+}
+
 export type GetSourceHook = (
   url: string,
   context: GetSourceContext,
   defaultGetSource: GetSourceHook,
 ) => Promise<GetSourceResponse>;
-
-export interface GetSourceResponse {
-  source: string | SharedArrayBuffer | Uint8Array;
-}
