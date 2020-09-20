@@ -21,6 +21,8 @@ updates:
     schedule:
       interval: daily
     versioning-strategy: increase
+    allow:
+      - dependency-type: direct
     assignees:
       - KristianFJones
     reviewers:
