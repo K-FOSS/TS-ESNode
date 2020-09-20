@@ -8,7 +8,7 @@ export type ModuleFormat =
   | 'module'
   | 'wasm';
 
-export type Source = string | Buffer;
+export type Source = string | SharedArrayBuffer | Uint8Array;
 
 export interface ResolveContext {
   parentURL?: string;
@@ -19,6 +19,12 @@ export interface ResolveResponse {
   format?: string;
 }
 
+export type ResolveHook = (
+  specifier: string,
+  context: ResolveContext,
+  defaultResolve: ResolveHook,
+) => Promise<ResolveResponse>;
+
 export interface TransformContext {
   url: string;
   format: string;
@@ -27,6 +33,12 @@ export interface TransformContext {
 export interface TransformResponse {
   source: Source;
 }
+
+export type TransformSourceHook = (
+  source: Source,
+  context: TransformContext,
+  defaultTransformSource: TransformSourceHook,
+) => Promise<TransformResponse>;
 
 export interface DynamicInstantiateResponse {
   exports: string[];
@@ -38,12 +50,18 @@ export interface GetFormatResponse {
   format: ModuleFormat;
 }
 
+export type GetFormatHook = (
+  url: string,
+  context: never,
+  defaultGetFormat: GetFormatHook,
+) => Promise<GetFormatResponse>;
+
 export interface GetSourceContext {
   format: string;
 }
 
 export interface GetSourceResponse {
-  source: string | SharedArrayBuffer | Uint8Array;
+  source: Source;
 }
 
 export type GetSourceHook = (

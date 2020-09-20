@@ -1,6 +1,6 @@
 // Testing/Tests/TSNonExtPaths/src/Module/Random/Random.test.ts
 import { TestSuite } from '@k-foss/ts-estests';
-import { deepStrictEqual, strictEqual } from 'assert';
+import { deepStrictEqual } from 'assert';
 
 export class TSNonExtPathRandomSuite extends TestSuite {
   public testName = 'TSNonExtPaths - Modules/Random/index.ts Suite';

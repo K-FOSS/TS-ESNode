@@ -26,7 +26,7 @@ export abstract class Route {
  * Example route so that the findModuleFiles type isn't messed up
  */
 export class ExampleRoute extends Route {
-  handler: Route['handler'] = async (request, reply) => {
+  handler: Route['handler'] = async () => {
     console.log('HelloWorld');
 
     return 'example';
@@ -74,7 +74,7 @@ export async function createFastifyServer(): Promise<FastifyInstance> {
 /**
  * Creates a fastify Testing Chain https://www.fastify.io/docs/latest/Testing/
  */
-export async function createFastifyTestServer() {
+export async function createFastifyTestServer(): Promise<FastifyInstance> {
   const webServer = await createFastifyServer();
 
   return webServer;

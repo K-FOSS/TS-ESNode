@@ -1,21 +1,24 @@
 // src/index.ts
 import { createRequire } from 'module';
-import { basename, dirname, resolve as resolvePath, relative } from 'path';
+import { basename, dirname, relative, resolve as resolvePath } from 'path';
 import ts, { CompilerOptions } from 'typescript';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { findFiles } from './findFiles';
 import {
   DynamicInstantiateResponse,
+  GetFormatHook,
   GetFormatResponse,
   GetSourceContext,
   GetSourceHook,
   GetSourceResponse,
   ModuleFormat,
   ResolveContext,
+  ResolveHook,
   ResolveResponse,
   Source,
   TransformContext,
   TransformResponse,
+  TransformSourceHook,
 } from './types';
 import { getTSConfig } from './Utils';
 
@@ -35,7 +38,7 @@ let TSConfig: CompilerOptions;
 export async function resolve(
   specifier: string,
   context: ResolveContext,
-  defaultResolve: Function,
+  defaultResolve: ResolveHook,
 ): Promise<ResolveResponse> {
   const { parentURL = baseURL } = context;
 
@@ -139,7 +142,7 @@ const CommonJSMap = new Set<string>();
 export async function getFormat(
   url: string,
   context: never,
-  defaultGetFormat: Function,
+  defaultGetFormat: GetFormatHook,
 ): Promise<GetFormatResponse> {
   let format = formatCache.get(url);
   if (format) return { format };
@@ -151,9 +154,11 @@ export async function getFormat(
   if (extensionsRegex.test(fileName)) format = 'module';
 
   if (!format) {
-    const defaultResolve = defaultGetFormat(url, context, defaultGetFormat) as {
-      format: ModuleFormat;
-    };
+    const defaultResolve = await defaultGetFormat(
+      url,
+      context,
+      defaultGetFormat,
+    );
     format = defaultResolve.format;
 
     /**
@@ -184,8 +189,6 @@ export async function getSource(
   context: GetSourceContext,
   defaultGetSource: GetSourceHook,
 ): Promise<GetSourceResponse> {
-  const { format } = context;
-
   if (CommonJSMap.has(url)) {
     const urlParts = url.split('/node_modules/');
 
@@ -220,22 +223,19 @@ const require = createRequire('${nodeModulesPath}/noop.js');
 const cjs = require('${moduleName}');
 
 ${linkKeys
-  .map((prop: any) => `let $${prop} = cjs[${JSON.stringify(prop)}];`)
+  .map((prop) => `let $${prop} = cjs[${JSON.stringify(prop)}];`)
   .join(';\n')}
 
 ${defaultKeys
-  .map(
-    (prop: any) =>
-      `let $default${prop} = cjs.default[${JSON.stringify(prop)}];`,
-  )
+  .map((prop) => `let $default${prop} = cjs.default[${JSON.stringify(prop)}];`)
   .join(';\n')}
 
 export {
-${linkKeys.map((prop: string) => ` $${prop} as ${prop},`).join('\n')}
+${linkKeys.map((prop) => ` $${prop} as ${prop},`).join('\n')}
 }
 
 export {
-${defaultKeys.map((prop: string) => ` $default${prop} as ${prop},`).join('\n')}
+${defaultKeys.map((prop) => ` $default${prop} as ${prop},`).join('\n')}
 }
 
 ${isDefault ? `export default cjs['default'];` : 'export default cjs;'}
@@ -252,7 +252,7 @@ ${isDefault ? `export default cjs['default'];` : 'export default cjs;'}
 export async function transformSource(
   source: Source,
   context: TransformContext,
-  defaultTransformSource: Function,
+  defaultTransformSource: TransformSourceHook,
 ): Promise<TransformResponse> {
   const resolvedUrl = new URL(context.url);
   const fileName = basename(resolvedUrl.pathname);
