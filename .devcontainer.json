@@ -13,7 +13,8 @@
   "extensions": [
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
-    "eamodio.gitlens"
+    "eamodio.gitlens",
+    "visualstudioexptteam.vscodeintellicode"
   ],
 
   "remoteUser": "node",
