@@ -1,7 +1,6 @@
-FROM node:alpine3.11
-RUN apk add --no-cache git
+ARG VARIANT="14"
+FROM node:14-slim
 
-# Add Sudo to allow occasional usage of root. I wish I could remove this but I can't seem to get the node_modules volume working correctly.
-RUN apk add --no-cache sudo \
-  && echo node ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/node \
-  && chmod 0440 /etc/sudoers.d/node
+USER root
+# [Optional] Uncomment this section to install additional OS packages.
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get -y install --no-install-recommends git sudo
