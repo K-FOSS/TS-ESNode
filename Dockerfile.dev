@@ -1,6 +1,11 @@
-ARG VARIANT="14"
-FROM node:14-slim
+ARG VARIANT="15"
+FROM node:${VARIANT}-slim
 
 USER root
 # [Optional] Uncomment this section to install additional OS packages.
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get -y install --no-install-recommends git sudo ca-certificates
+RUN apt-get update \
+  && export DEBIAN_FRONTEND=noninteractive && apt-get -y install --no-install-recommends git sudo ca-certificates \
+  && adduser node sudo \
+  && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER node
