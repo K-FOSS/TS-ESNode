@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
-        node: ['13.9', '13.10', '13.11', '14.x']
+        node: ['13.9', '13.10', '13.11', '14.1', '14.4', '14.15.1', '>=14.15.0']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
