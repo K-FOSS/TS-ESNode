@@ -61,8 +61,5 @@
     "node",
     "runtime",
     "environment"
-  ],
-  "dependencies": {
-    "winston": "^3.3.3"
-  }
+  ]
 }
