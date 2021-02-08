@@ -206,17 +206,19 @@ export async function getSource(
 
     let defaultKeys: string[] = [];
 
+    const moduleKeys = Object.keys(dynModule);
+
     if (dynModule.default) {
       if (dynModule.default !== dynModule) {
         isDefault = true;
-        defaultKeys = Object.keys(dynModule.default);
+        defaultKeys = Object.keys(dynModule.default).filter(
+          (defaultKey) => !moduleKeys.includes(defaultKey),
+        );
       }
     }
 
     // Export as ES Module.
-    const linkKeys = Object.keys(dynModule).filter(
-      (key) => key !== 'default' && !defaultKeys.includes(key),
-    );
+    const linkKeys = Object.keys(dynModule).filter((key) => key !== 'default');
 
     const code = `
 import {createRequire} from 'module';
