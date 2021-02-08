@@ -15,7 +15,8 @@
     "dbaeumer.vscode-eslint",
     "eamodio.gitlens",
     "visualstudioexptteam.vscodeintellicode",
-    "piotrpalarz.vscode-gitignore-generator"
+    "piotrpalarz.vscode-gitignore-generator",
+    "redhat.vscode-yaml"
   ],
 
   "remoteUser": "node",
