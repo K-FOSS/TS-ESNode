@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/K-FOSS/TS-ESNode/compare/v2.0.0...v2.0.1) (2021-02-08)
+
+
+### Bug Fixes
+
+* **deps:** Remove `winston` from production deps ([#223](https://github.com/K-FOSS/TS-ESNode/issues/223)) ([2eca2dc](https://github.com/K-FOSS/TS-ESNode/commit/2eca2dcf6cdd5ca35285c63a3cb56b9783b3160e))
+
 # [2.0.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.7.0...v2.0.0) (2021-02-08)
 
 
