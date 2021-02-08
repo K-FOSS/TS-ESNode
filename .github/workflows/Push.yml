@@ -9,8 +9,8 @@ on:
       - master
 
 jobs:
-  Test:
-    name: Tests
+  IntegrationTest:
+    name: Integration Tests
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
@@ -27,5 +27,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Tests
-        run: npm run test
+      - name: Run Integration Tests
+        run: npm run test:integration
+
+  # UnitTests:
+  #   name: Unit Tests
+  #   strategy:
+  #     matrix:
+  #       os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+  #       node: ['13.9', '13.10', '13.11', '14.1', '14.4', '14.15.1', '>=14.15.0']
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - uses: actions/setup-node@v2.1.4
+  #       with:
+  #         node-version: ${{ matrix.node }}
+  #         registry-url: 'https://registry.npmjs.org'
+
+  #     - name: Install dependencies
+  #       run: npm ci
+
+  #     - name: Run Unit Tests
+  #       run: npm run test:integration

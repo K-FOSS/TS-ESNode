@@ -214,7 +214,9 @@ export async function getSource(
     }
 
     // Export as ES Module.
-    const linkKeys = Object.keys(dynModule).filter((key) => key !== 'default');
+    const linkKeys = Object.keys(dynModule).filter(
+      (key) => key !== 'default' && !defaultKeys.includes(key),
+    );
 
     const code = `
 import {createRequire} from 'module';
