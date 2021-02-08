@@ -1,5 +1,5 @@
 // Testing/Runner/Utils/findTests.ts
-import { readdir, readFile } from 'fs/promises';
+import { promises as fs } from 'fs';
 import { resolve } from 'path';
 import { resolvePath } from './resolvePath';
 
@@ -12,7 +12,7 @@ interface TestFolder {
 export async function findTestFolders(): Promise<TestFolder[]> {
   const testsFolderPath = resolvePath('../../Tests/', import.meta.url);
 
-  const testFolders = await readdir(testsFolderPath, {
+  const testFolders = await fs.readdir(testsFolderPath, {
     encoding: 'utf-8',
     withFileTypes: false,
   });
