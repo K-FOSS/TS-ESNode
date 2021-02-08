@@ -13,7 +13,7 @@ async function runTests(): Promise<void> {
   const errs: Error[] = [];
 
   for (const testFolder of testFolders) {
-    console.log(`Starting Test Folder: ${testFolder.testName}`);
+    console.log(`::group::Test ${testFolder.testName}`);
 
     await run('npm ci', {
       cwd: testFolder.testFolderPath,
@@ -26,8 +26,14 @@ async function runTests(): Promise<void> {
         cwd: testFolder.testFolderPath,
       });
     } catch (err) {
+      console.error(
+        `::warning file=${testFolder.testFolderPath}/package.json,line=0,col=0::${err.message}`,
+      );
+
       errs.push(err);
     }
+
+    console.log(`::endgroup::`);
   }
 
   if (errs.length > 0) {
