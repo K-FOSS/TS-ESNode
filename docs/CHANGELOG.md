@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/K-FOSS/TS-ESNode/compare/v2.0.1...v2.0.2) (2021-02-08)
+
+
+### Bug Fixes
+
+* **readme:** Update Badge ([#225](https://github.com/K-FOSS/TS-ESNode/issues/225)) ([1a8c475](https://github.com/K-FOSS/TS-ESNode/commit/1a8c475bd94fc923a3fd5b0d1640b9f78618d774))
+
 ## [2.0.1](https://github.com/K-FOSS/TS-ESNode/compare/v2.0.0...v2.0.1) (2021-02-08)
 
 
