@@ -16,9 +16,7 @@ export class TSConfigTestSuite extends TestSuite {
       'renderModule(App)',
     );
 
-    process.env.TS_CONFIG_PATH = resolve(
-      'Testing/Tests/TSConfig/tsconfig.random.json',
-    );
+    process.env.TS_CONFIG_PATH = resolve('tsconfig.random.json');
 
     const { Main } = await import('./Main');
 

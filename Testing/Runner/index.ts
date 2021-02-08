@@ -1,21 +1,37 @@
 // Testing/Runner/index.ts
-import { installTestsDependencies } from './Utils/installTestsDependencies';
 import { run } from './Utils/run';
 import { promises as fs } from 'fs';
+import { findTestFolders } from './Utils/findTests';
 
 async function runTests(): Promise<void> {
-  await installTestsDependencies();
+  const testFolders = await findTestFolders();
 
   try {
     await fs.symlink(process.cwd(), 'node_modules/@k-foss/ts-esnode', 'dir');
   } catch {}
 
-  try {
-    await run('npx ts-estest ./Testing/Tests', {
-      cwd: process.cwd(),
+  const errs: Error[] = [];
+
+  for (const testFolder of testFolders) {
+    console.log(`Starting Test Folder: ${testFolder.testName}`);
+
+    await run('npm ci', {
+      cwd: testFolder.testFolderPath,
     });
-  } catch {
-    process.exit(1);
+
+    console.log(`Packages installed`);
+
+    try {
+      await run('npx ts-estest ./src', {
+        cwd: testFolder.testFolderPath,
+      });
+    } catch (err) {
+      errs.push(err);
+    }
+  }
+
+  if (errs.length > 0) {
+    throw errs;
   }
 }
 

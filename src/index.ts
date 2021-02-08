@@ -206,10 +206,14 @@ export async function getSource(
 
     let defaultKeys: string[] = [];
 
+    const moduleKeys = Object.keys(dynModule);
+
     if (dynModule.default) {
       if (dynModule.default !== dynModule) {
         isDefault = true;
-        defaultKeys = Object.keys(dynModule.default);
+        defaultKeys = Object.keys(dynModule.default).filter(
+          (defaultKey) => !moduleKeys.includes(defaultKey),
+        );
       }
     }
 

@@ -16,5 +16,6 @@
       "@k-foss/ts-esnode": ["./out/dist/index.js"]
     }
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts", "src/**/fixtures/**/*"]
 }
