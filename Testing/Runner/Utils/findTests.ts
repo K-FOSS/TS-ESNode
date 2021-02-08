@@ -22,7 +22,7 @@ export async function findTestFolders(): Promise<TestFolder[]> {
       const testFolderPath = resolve(testsFolderPath, testFolderName);
 
       try {
-        const packageJSONFile = await readFile(
+        const packageJSONFile = await fs.readFile(
           resolve(testFolderPath, 'package.json'),
         );
 
