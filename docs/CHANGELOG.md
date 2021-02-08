@@ -1,3 +1,16 @@
+# [2.0.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.7.0...v2.0.0) (2021-02-08)
+
+
+### Bug Fixes
+
+* **Actions:** Fix Test action on Release Workflow ([082e58b](https://github.com/K-FOSS/TS-ESNode/commit/082e58b035bafa7ad824edca75cfcd09c9d4b9f7))
+* **duplicated-defaults-keys:** Fix Duplicated Default Keys Assigned via Object.assigbn ([#217](https://github.com/K-FOSS/TS-ESNode/issues/217)) ([5d819ce](https://github.com/K-FOSS/TS-ESNode/commit/5d819ce9cb7dc5745b0752c3b01de5c0b3c590eb))
+
+
+### BREAKING CHANGES
+
+* **duplicated-defaults-keys:** This is potentially a major change, I'm uncertain if any modules or current projects actually rely upon this "bug" Please create an issue if anything is broken after this release.
+
 # [1.7.0](https://github.com/K-FOSS/TS-ESNode/compare/v1.6.0...v1.7.0) (2020-09-15)
 
 
