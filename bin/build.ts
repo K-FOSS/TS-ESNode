@@ -6,7 +6,12 @@ async function build(): Promise<void> {
   console.log('Starting build of TS-ESNode');
 
   console.info(`Removing 'out/dist' directory`);
-  await fs.rmdir('out/dist', { recursive: true });
+  try {
+    await fs.rm('out/dist', { recursive: true });    
+  } catch {
+
+  }
+
 
   console.info('Building TS-ESNode');
 
