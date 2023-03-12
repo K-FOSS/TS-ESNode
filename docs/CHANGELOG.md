@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/K-FOSS/TS-ESNode/compare/v2.0.2...v2.0.3) (2023-03-12)
+
+
+### Bug Fixes
+
+* **Everything:** Closes [#443](https://github.com/K-FOSS/TS-ESNode/issues/443) ([#478](https://github.com/K-FOSS/TS-ESNode/issues/478)) ([beda0ba](https://github.com/K-FOSS/TS-ESNode/commit/beda0ba7bdc1c19b21d7043ca42552d68d773998))
+
 ## [2.0.2](https://github.com/K-FOSS/TS-ESNode/compare/v2.0.1...v2.0.2) (2021-02-08)
 
 
