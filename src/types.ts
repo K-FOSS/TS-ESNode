@@ -14,9 +14,26 @@ export interface ResolveContext {
   parentURL?: string;
 }
 
+export interface LoadContext {
+  conditions: string[];
+
+  format?: string
+
+  importAssertions: object;
+}
+
+export interface LoadResponse {
+  format: string;
+
+  shortCircuit?: boolean;
+
+  source: string | ArrayBuffer;
+}
+
 export interface ResolveResponse {
   url: string;
   format?: string;
+  shortCircuit?: boolean;
 }
 
 export type ResolveHook = (

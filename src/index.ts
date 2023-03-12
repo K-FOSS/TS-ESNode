@@ -11,6 +11,8 @@ import {
   GetSourceContext,
   GetSourceHook,
   GetSourceResponse,
+  LoadContext,
+  LoadResponse,
   ModuleFormat,
   ResolveContext,
   ResolveHook,
@@ -71,6 +73,7 @@ export async function resolve(
     // specifiers ending in the TypeScript file extensions.
     return {
       url: resolvedUrl.href,
+      shortCircuit: true,
     };
   }
 
@@ -87,6 +90,7 @@ export async function resolve(
 
     return {
       url: file.href,
+      shortCircuit: true,
     };
   }
 
@@ -251,6 +255,117 @@ ${isDefault ? `export default cjs['default'];` : 'export default cjs;'}
   }
 
   return defaultGetSource(url, context, defaultGetSource);
+}
+
+export async function load(
+  url: string,
+  context: LoadContext,
+  nextLoad: (specifier: string, context: LoadContext) => Promise<LoadResponse>
+): Promise<LoadResponse> {
+  const resolvedUrl = new URL(url);
+  const fileName = basename(resolvedUrl.pathname);
+
+  let format: string = 'commonjs';
+
+  if (extensionsRegex.test(fileName)) format = 'module';
+
+  const response = await nextLoad(url, context);
+
+  if (format === 'module') {
+    const sourceFilePath = fileURLToPath(url);
+
+    // Load the closest `tsconfig.json` to the source file
+    const tsConfig = await getTSConfig(dirname(sourceFilePath));
+    TSConfig = tsConfig;
+
+    // Transpile the source code that Node passed to us.
+    const transpiledModule = ts.transpileModule(response.source.toString(), {
+      compilerOptions: TSConfig,
+      reportDiagnostics: true,
+      fileName: resolvedUrl.pathname,
+      moduleName: fileName,
+    });
+
+    return {
+      format: 'module',
+      source: transpiledModule.outputText,
+      shortCircuit: true
+    }
+  }
+
+  if (response.format === 'commonjs') {
+
+
+    const urlParts = url.split('/node_modules/');
+
+    // Extract the module name after node_modules.
+    const moduleName = urlParts.pop()!;
+
+    const nodeModulesPath = urlParts.join('/node_modules/');
+
+    // Create a require function next to node_module, and import the CommonJS module.
+    const require = createRequire(`${nodeModulesPath}/noop.js`);
+    const dynModule = require(moduleName);
+    let isDefault = false;
+
+    let defaultKeys: string[] = [];
+
+    const moduleKeys = Object.keys(dynModule);
+
+    if (dynModule.default) {
+      if (dynModule.default !== dynModule) {
+        isDefault = true;
+        defaultKeys = Object.keys(dynModule.default).filter(
+          (defaultKey) => !moduleKeys.includes(defaultKey),
+        );
+      }
+    } 
+
+    // Export as ES Module.
+    const linkKeys = Object.keys(dynModule).filter((key) => key !== 'default');
+
+    return {
+      format: 'module',
+      source: `
+      import {createRequire} from 'module';
+      
+      const require = createRequire('${nodeModulesPath}/noop.js');
+      const cjs = require('${moduleName}');
+      
+      ${linkKeys
+        .map((prop) => `let $${prop} = cjs[${JSON.stringify(prop)}];`)
+        .join(';\n')}
+      
+      ${defaultKeys
+        .map((prop) => `let $default${prop} = cjs.default[${JSON.stringify(prop)}];`)
+        .join(';\n')}
+      
+      export {
+      ${linkKeys.map((prop) => ` $${prop} as ${prop},`).join('\n')}
+      }
+      
+      export {
+      ${defaultKeys.map((prop) => ` $default${prop} as ${prop},`).join('\n')}
+      }
+      
+      ${isDefault ? `export default cjs['default'];` : 'export default cjs;'}
+      `,
+      shortCircuit: false
+    }
+  }
+
+  
+  // return {
+  //   format: 'commonjs',
+  //   shortCircuit: false,
+  //   source: ''
+  // }
+
+  
+
+  // console.log('Response from load', response)
+
+  return response;
 }
 
 export async function transformSource(
