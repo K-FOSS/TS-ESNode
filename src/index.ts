@@ -260,12 +260,12 @@ ${isDefault ? `export default cjs['default'];` : 'export default cjs;'}
 export async function load(
   url: string,
   context: LoadContext,
-  nextLoad: (specifier: string, context: LoadContext) => Promise<LoadResponse>
+  nextLoad: (specifier: string, context: LoadContext) => Promise<LoadResponse>,
 ): Promise<LoadResponse> {
   const resolvedUrl = new URL(url);
   const fileName = basename(resolvedUrl.pathname);
 
-  let format: string = 'commonjs';
+  let format = 'commonjs';
 
   if (extensionsRegex.test(fileName)) format = 'module';
 
@@ -289,13 +289,11 @@ export async function load(
     return {
       format: 'module',
       source: transpiledModule.outputText,
-      shortCircuit: true
-    }
+      shortCircuit: true,
+    };
   }
 
   if (response.format === 'commonjs') {
-
-
     const urlParts = url.split('/node_modules/');
 
     // Extract the module name after node_modules.
@@ -319,7 +317,7 @@ export async function load(
           (defaultKey) => !moduleKeys.includes(defaultKey),
         );
       }
-    } 
+    }
 
     // Export as ES Module.
     const linkKeys = Object.keys(dynModule).filter((key) => key !== 'default');
@@ -337,7 +335,10 @@ export async function load(
         .join(';\n')}
       
       ${defaultKeys
-        .map((prop) => `let $default${prop} = cjs.default[${JSON.stringify(prop)}];`)
+        .map(
+          (prop) =>
+            `let $default${prop} = cjs.default[${JSON.stringify(prop)}];`,
+        )
         .join(';\n')}
       
       export {
@@ -350,20 +351,9 @@ export async function load(
       
       ${isDefault ? `export default cjs['default'];` : 'export default cjs;'}
       `,
-      shortCircuit: false
-    }
+      shortCircuit: false,
+    };
   }
-
-  
-  // return {
-  //   format: 'commonjs',
-  //   shortCircuit: false,
-  //   source: ''
-  // }
-
-  
-
-  // console.log('Response from load', response)
 
   return response;
 }

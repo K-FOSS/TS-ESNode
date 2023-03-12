@@ -17,8 +17,9 @@ export interface ResolveContext {
 export interface LoadContext {
   conditions: string[];
 
-  format?: string
+  format?: string;
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   importAssertions: object;
 }
 
