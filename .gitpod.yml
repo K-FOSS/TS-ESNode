@@ -7,4 +7,5 @@
 tasks:
   - init: npm install && npm run build
 
-image: gitpod/workspace-node:latest
+image:
+  file: Dockerfile.dev
