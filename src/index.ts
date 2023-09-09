@@ -274,7 +274,7 @@ export async function load(
 
   const response = await nextLoad(url, {
     ...context,
-    format
+    format,
   });
 
   if (format === 'module') {
