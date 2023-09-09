@@ -5,7 +5,7 @@
   "NODE_OPTIONS": "--harmony-top-level-await",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --loader ../../../out/dist/index.js --experimental-specifier-resolution=node --experimental-import-meta-resolve --harmony-optional-chaining --harmony-top-level-await src/index.ts"
+    "start": "node --loader ../../../out/dist/index.js --loader extensionless --experimental-import-meta-resolve --harmony-optional-chaining --harmony-top-level-await src/index.ts"
   },
   "author": "",
   "license": "ISC"

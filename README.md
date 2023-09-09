@@ -22,7 +22,7 @@ Create a `dev` script in `package.json`
 ```
 {
   "scripts": {
-    "dev": "node --loader @k-foss/ts-esnode --experimental-specifier-resolution=node ./src/index.ts",
+    "dev": "node --loader @k-foss/ts-esnode --loader extensionless ./src/index.ts",
   }
 }
 ```

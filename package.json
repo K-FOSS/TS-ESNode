@@ -25,6 +25,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^5.0.0",
+    "extensionless": "^1.4.5",
     "prettier": "2.2.1",
     "semantic-release": "^17.3.8",
     "typescript": "^4.1.3"
@@ -37,12 +38,12 @@
   },
   "scripts": {
     "pretest:integration": "npm run build",
-    "test:integration": "node --loader ./out/dist/index.js --experimental-import-meta-resolve --experimental-specifier-resolution=node ./Testing/Runner/index.ts",
+    "test:integration": "node --experimental-loader=extensionless --loader ./out/dist/index.js --experimental-import-meta-resolve  ./Testing/Runner/index.ts",
     "test:unit": "ts-estest ./src/",
     "prebuild": "tsc -p ./bin/",
-    "build": "node --experimental-specifier-resolution=node ./out/build/build.js",
+    "build": "node --experimental-loader=extensionless ./out/build/build.js",
     "pretry": "",
-    "try": "node --loader ./out/dist/index.js --experimental-specifier-resolution=node ./test/",
+    "try": "node  --loader extensionless --loader ./out/dist/index.js --loader extensionless ./test/",
     "prepublishOnly": "npm run build",
     "prettier": "prettier --config .prettierrc --check \"src/**/*ts\" \"bin/**/*.ts\"",
     "lint": "eslint -c .eslintrc.json . --ext .js,.ts",
