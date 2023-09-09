@@ -15,7 +15,7 @@ jobs:
     name: Prettier
     strategy:
       matrix:
-        node: ['15.x']
+        node: ['20.x']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -35,7 +35,7 @@ jobs:
     name: ESLint
     strategy:
       matrix:
-        node: ['15.x']
+        node: ['20.x']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -55,7 +55,7 @@ jobs:
     name: TSC Typecheck
     strategy:
       matrix:
-        node: ['15.x']
+        node: ['20.x']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -76,7 +76,19 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
-        node: ['13.9', '13.10', '13.11', '14.1', '14.4', '14.15.1', '>=14.15.0']
+        node:
+          [
+            '13.9',
+            '13.10',
+            '13.11',
+            '14.1',
+            '14.4',
+            '14.15.1',
+            '17.x',
+            '18.x',
+            '19.x',
+            '>=14.15.0',
+          ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -124,4 +136,3 @@ jobs:
           GIT_COMMITTER_NAME: 'KJDev-Bots'
           GIT_AUTHOR_EMAIL: 'bots@kristianjones.dev'
           GIT_COMMITTER_EMAIL: 'bots@kristianjones.dev'
-
