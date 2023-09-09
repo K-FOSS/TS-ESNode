@@ -265,11 +265,17 @@ export async function load(
   const resolvedUrl = new URL(url);
   const fileName = basename(resolvedUrl.pathname);
 
-  let format = 'commonjs';
+  /**
+   * TODO Massively refactor this and figure out WTF is happening
+   */
+  let format = context.format ?? 'module';
 
   if (extensionsRegex.test(fileName)) format = 'module';
 
-  const response = await nextLoad(url, context);
+  const response = await nextLoad(url, {
+    ...context,
+    format
+  });
 
   if (format === 'module') {
     const sourceFilePath = fileURLToPath(url);
