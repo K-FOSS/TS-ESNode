@@ -18,7 +18,7 @@ jobs:
         node: ['20.x']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v2.1.4
         with:
@@ -38,7 +38,7 @@ jobs:
         node: ['20.x']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v2.1.4
         with:
@@ -58,7 +58,7 @@ jobs:
         node: ['20.x']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v2.1.4
         with:
@@ -84,7 +84,7 @@ jobs:
           ]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v2.1.4
         with:
@@ -103,7 +103,7 @@ jobs:
     needs: [IntegrationTest, TSC, Prettier, ESLint]
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
